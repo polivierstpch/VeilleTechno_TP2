@@ -1,0 +1,16 @@
+{
+  "TP2_veilletechno_rl_pospc_cmr.en-us": {
+    "rootDialog": true,
+    "triggers": {
+      "": [
+        "WelcomeDialog.en-us"
+      ],
+      "Cancel": [
+        "CancelDialog.en-us"
+      ],
+      "Help": [
+        "HelpDialog.en-us"
+      ]
+    }
+  }
+}
