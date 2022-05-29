@@ -2,7 +2,8 @@
   "$kind": "Microsoft.MultiLanguageRecognizer",
   "id": "LUIS_TP2_veilletechno_rl_pospc_cmr",
   "recognizers": {
-    "en-us": "TP2_veilletechno_rl_pospc_cmr.en-us.lu",
-    "": "TP2_veilletechno_rl_pospc_cmr.en-us.lu"
+    "fr-ca": "TP2_veilletechno_rl_pospc_cmr.fr-ca.lu",
+    "": "TP2_veilletechno_rl_pospc_cmr.fr-ca.lu",
+    "en-us": "TP2_veilletechno_rl_pospc_cmr.en-us.lu"
   }
 }

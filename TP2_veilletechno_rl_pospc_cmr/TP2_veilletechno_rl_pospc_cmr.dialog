@@ -145,6 +145,37 @@
           "activity": "${SendActivity_DidNotUnderstand()}"
         }
       ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "dkJURS",
+        "name": "reserver"
+      },
+      "intent": "reserver",
+      "actions": [
+        {
+          "$kind": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "bpG9d4"
+          },
+          "defaultLocale": "fr-ca",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "prompt": "${ConfirmInput_Prompt_bpG9d4()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or ",
+            "inlineOr": " or ",
+            "inlineSeparator": ", "
+          },
+          "value": true
+        }
+      ]
     }
   ],
   "generator": "TP2_veilletechno_rl_pospc_cmr.lg",

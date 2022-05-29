@@ -29,9 +29,5 @@
 - duck
 
 # reserver
-> add some example phrases to trigger this intent:
-- réserver une place pour 2
-- {Reservation = une table pour demain}
-
 > entity definitions:
 @ ml Reservation

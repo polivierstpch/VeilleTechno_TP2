@@ -1,4 +1,19 @@
 {
+  "TP2_veilletechno_rl_pospc_cmr.fr-ca": {
+    "rootDialog": true,
+    "triggers": {
+      "": [
+        "WelcomeDialog.fr-ca"
+      ],
+      "Cancel": [
+        "CancelDialog.fr-ca"
+      ],
+      "Help": [
+        "HelpDialog.fr-ca"
+      ],
+      "reserver": ""
+    }
+  },
   "TP2_veilletechno_rl_pospc_cmr.en-us": {
     "rootDialog": true,
     "triggers": {
@@ -10,7 +25,8 @@
       ],
       "Help": [
         "HelpDialog.en-us"
-      ]
+      ],
+      "reserver": ""
     }
   }
 }

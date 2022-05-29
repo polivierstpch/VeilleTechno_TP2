@@ -1,9 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TP2_veilletechno_rl_pospc_cmr", "TP2_veilletechno_rl_pospc_cmr\TP2_veilletechno_rl_pospc_cmr.csproj", "{E73D83F9-C90E-4C30-A38B-375DD39104F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TP2withSDK", "..\BotBuilder-Samples-main\samples\csharp_dotnetcore\13.core-bot\TP2withSDK.csproj", "{9907E531-9A77-49E0-974A-B3A36532233D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{E73D83F9-C90E-4C30-A38B-375DD39104F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E73D83F9-C90E-4C30-A38B-375DD39104F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E73D83F9-C90E-4C30-A38B-375DD39104F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9907E531-9A77-49E0-974A-B3A36532233D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9907E531-9A77-49E0-974A-B3A36532233D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9907E531-9A77-49E0-974A-B3A36532233D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9907E531-9A77-49E0-974A-B3A36532233D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
