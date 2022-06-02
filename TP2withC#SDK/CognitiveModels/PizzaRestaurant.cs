@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
+using TP2withSDK.Entities;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -24,52 +25,22 @@ namespace Microsoft.BotBuilderSamples
         };
         public Dictionary<Intent, IntentScore> Intents;
 
-        public class _Entities
+        public class Entities
         {
-
-            // Built-in entities
-            public DateTimeSpec[] datetime;
-
-            // Lists
-            public string[] Reservation;
-
-            // Composites
-            public class _InstanceFrom
-            {
-                public InstanceData[] Reservation;
-            }
-            public class FromClass
-            {
-                public string[][] Reservation;
-                [JsonProperty("$instance")]
-                public _InstanceFrom _instance;
-            }
-            public FromClass[] From;
-
-            public class _InstanceTo
-            {
-                public InstanceData[] Reservation;
-            }
-            public class ToClass
-            {
-                public string[][] Reservation;
-                [JsonProperty("$instance")]
-                public _InstanceTo _instance;
-            }
-            public ToClass[] To;
+            public object[] Reservation;
 
             // Instance
-            public class _Instance
-            {
-                //public InstanceData[] datetime;
-                public InstanceData[] Reservation;
-                //public InstanceData[] From;
-                //public InstanceData[] To;
-            }
-            [JsonProperty("$instance")]
-            public _Instance _instance;
+            //public class _Instance
+            //{
+            //    //public InstanceData[] NumberOfPlaces;
+            //    public InstanceData[] Reservation;
+            //    //public InstanceData[] From;
+            //    //public InstanceData[] To;
+            //}
+            //[JsonProperty("$instance")]
+            //public _Instance _instance;
         }
-        public _Entities Entities;
+        public Entities Entites;
 
         [JsonExtensionData(ReadData = true, WriteData = true)]
         public IDictionary<string, object> Properties {get; set; }
@@ -80,7 +51,7 @@ namespace Microsoft.BotBuilderSamples
             Text = app.Text;
             AlteredText = app.AlteredText;
             Intents = app.Intents;
-            Entities = app.Entities;
+            Entites = app.Entities;
             Properties = app.Properties;
         }
 

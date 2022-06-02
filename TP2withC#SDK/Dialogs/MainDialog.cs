@@ -11,6 +11,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
+using TP2withSDK.Entities;
 
 namespace Microsoft.BotBuilderSamples.Dialogs
 {
@@ -71,12 +72,12 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                     //await ShowWarningForUnsupportedCities(stepContext.Context, luisResult, cancellationToken);
 
                     // Initialize BookingDetails with any entities we may have found in the response.
-                    //var bookingDetails = new BookingDetails()
+                    var reservationDetails = luisResult.Entites.Reservation;//new ReservationDetails()
                     //{
-                    //    // Get destination and origin from the composite entities arrays.
-                    //    Destination = luisResult.ToEntities.Airport,
-                    //    Origin = luisResult.FromEntities.Airport,
-                    //    TravelDate = luisResult.TravelDate,
+                        // Get destination and origin from the composite entities arrays.
+                        //Time = luisResult.Entities.Reservation.Time,
+                        //NumberOfPlaces = luisResult.Entities.NumberOfPlaces,
+                        //Client = luisResult.Entities.ClientEntities,
                     //};
 
                     // Run the BookingDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.

@@ -1,0 +1,1099 @@
+{
+  "luis_schema_version": "7.0.0",
+  "intents": [
+    {
+      "name": "Cancel",
+      "features": []
+    },
+    {
+      "name": "Help",
+      "features": []
+    },
+    {
+      "name": "ModifyOrder",
+      "features": []
+    },
+    {
+      "name": "None",
+      "features": []
+    },
+    {
+      "name": "Reserver",
+      "features": []
+    }
+  ],
+  "entities": [
+    {
+      "name": "PizzaOrder",
+      "children": [
+        {
+          "name": "PizzaOrder.Pizza",
+          "children": [
+            {
+              "name": "Pizza.Quantity",
+              "children": [],
+              "features": [
+                {
+                  "modelName": "number",
+                  "isRequired": true
+                }
+              ]
+            },
+            {
+              "name": "Pizza.Size",
+              "children": [],
+              "features": [
+                {
+                  "modelName": "SizeList",
+                  "isRequired": true
+                }
+              ]
+            },
+            {
+              "name": "Pizza.ToppingModifier",
+              "children": [
+                {
+                  "name": "Topping",
+                  "children": [],
+                  "features": [
+                    {
+                      "modelName": "ToppingList",
+                      "isRequired": true
+                    }
+                  ]
+                },
+                {
+                  "name": "Modifier",
+                  "children": [],
+                  "features": [
+                    {
+                      "modelName": "ModifierList",
+                      "isRequired": true
+                    }
+                  ]
+                }
+              ],
+              "features": []
+            },
+            {
+              "name": "Pizza.Crust",
+              "children": [],
+              "features": []
+            },
+            {
+              "name": "Pizza.Type",
+              "children": [],
+              "features": []
+            }
+          ],
+          "features": []
+        },
+        {
+          "name": "PizzaOrder.Notes",
+          "children": [],
+          "features": []
+        },
+        {
+          "name": "PizzaOrder.OrderType",
+          "children": [],
+          "features": [
+            {
+              "modelName": "OrderTypeList",
+              "isRequired": true
+            }
+          ]
+        },
+        {
+          "name": "PizzaOrder.DeliveryAddress",
+          "children": [
+            {
+              "name": "DeliveryAddress.StreetNumber",
+              "children": [],
+              "features": [
+                {
+                  "modelName": "number",
+                  "isRequired": true
+                }
+              ]
+            },
+            {
+              "name": "DeliveryAddress.StreetName",
+              "children": [],
+              "features": []
+            },
+            {
+              "name": "DeliveryAddress.City",
+              "children": [],
+              "features": []
+            },
+            {
+              "name": "DeliveryAddress.PostalCode",
+              "children": [],
+              "features": []
+            }
+          ],
+          "features": []
+        },
+        {
+          "name": "PizzaOrder.SideDish",
+          "children": [
+            {
+              "name": "SideDish.Quantity",
+              "children": [],
+              "features": [
+                {
+                  "modelName": "number",
+                  "isRequired": true
+                }
+              ]
+            },
+            {
+              "name": "SideDish.Product",
+              "children": [],
+              "features": []
+            },
+            {
+              "name": "SideDish.Format",
+              "children": [],
+              "features": [
+                {
+                  "modelName": "SizeList",
+                  "isRequired": true
+                }
+              ]
+            }
+          ],
+          "features": []
+        }
+      ],
+      "roles": [],
+      "features": []
+    },
+    {
+      "name": "Reservation",
+      "children": [
+        {
+          "name": "Reservation.Time",
+          "children": [],
+          "features": [
+            {
+              "modelName": "datetimeV2",
+              "isRequired": true
+            }
+          ]
+        },
+        {
+          "name": "Reservation.NumberOfPlaces",
+          "children": [],
+          "features": [
+            {
+              "modelName": "number",
+              "isRequired": true
+            }
+          ]
+        },
+        {
+          "name": "Reservation.Client",
+          "children": [
+            {
+              "name": "Client.PhoneNumber",
+              "children": [],
+              "features": [
+                {
+                  "modelName": "phoneNumber",
+                  "isRequired": true
+                }
+              ]
+            },
+            {
+              "name": "Client.Name",
+              "children": [],
+              "features": []
+            }
+          ],
+          "features": []
+        },
+        {
+          "name": "Reservation.Specification",
+          "children": [],
+          "features": []
+        },
+        {
+          "name": "Reservation.Notes",
+          "children": [],
+          "features": []
+        }
+      ],
+      "roles": [],
+      "features": []
+    }
+  ],
+  "hierarchicals": [],
+  "composites": [],
+  "closedLists": [
+    {
+      "name": "CrustList",
+      "subLists": [
+        {
+          "canonicalForm": "Farcie",
+          "list": [
+            "croÃ»te farcie",
+            "croÃ»te avec fromage",
+            "croute farcie"
+          ]
+        },
+        {
+          "canonicalForm": "RÃ©guliÃ¨re",
+          "list": [
+            "croÃ»te rÃ©guliÃ¨re",
+            "croute reguliere"
+          ]
+        },
+        {
+          "canonicalForm": "Mince",
+          "list": [
+            "croute mince",
+            "croÃ»te mince",
+            "mince",
+            "croute lÃ©gÃ¨re",
+            "croute legere",
+            "croÃ»te lÃ©gÃ¨re"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "ModifierList",
+      "subLists": [
+        {
+          "canonicalForm": "ajoute",
+          "list": [
+            "avec",
+            "avec extra",
+            "extra",
+            "avec plus de",
+            "avec un peu de",
+            "plus de",
+            "remplacer avec"
+          ]
+        },
+        {
+          "canonicalForm": "enlever",
+          "list": [
+            "sans",
+            "pas de",
+            "aller mollo avec",
+            "changer pour",
+            "Ã  la place de",
+            "remplacer",
+            "exceptÃ©",
+            "ne veut pas"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "OrderTypeList",
+      "subLists": [
+        {
+          "canonicalForm": "emporter",
+          "list": [
+            "pour emporter",
+            "aller chercher en magasin",
+            "preparer pour emporter"
+          ]
+        },
+        {
+          "canonicalForm": "livraison",
+          "list": [
+            "pour livrer",
+            "en livraison",
+            "livrer moi"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "SizeList",
+      "subLists": [
+        {
+          "canonicalForm": "Petit",
+          "list": [
+            "plus petit",
+            "petit"
+          ]
+        },
+        {
+          "canonicalForm": "RÃ©gulier",
+          "list": [
+            "moyen",
+            "moyenne",
+            "rÃ©guliÃ¨re",
+            "rÃ©gulier",
+            "individuel",
+            "individuelle"
+          ]
+        },
+        {
+          "canonicalForm": "Large",
+          "list": [
+            "grande",
+            "grand",
+            "grosse",
+            "gros",
+            "large"
+          ]
+        },
+        {
+          "canonicalForm": "Extra Large",
+          "list": [
+            "familial",
+            "familiale",
+            "extra large",
+            "xl",
+            "massive",
+            "super grosse",
+            "super gros",
+            "extra gros",
+            "extra grosse"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "ToppingList",
+      "subLists": [
+        {
+          "canonicalForm": "Sauce Alfredo",
+          "list": [
+            "sauce alfredo",
+            "alfredo"
+          ]
+        },
+        {
+          "canonicalForm": "Anchois",
+          "list": [
+            "anchois"
+          ]
+        },
+        {
+          "canonicalForm": "Tout",
+          "list": [
+            "un peu de tout",
+            "tout",
+            "mix",
+            "mÃ©lange",
+            "melange"
+          ]
+        },
+        {
+          "canonicalForm": "Artichauts",
+          "list": [
+            "artichauts",
+            "artichaut",
+            "artichau",
+            "cardon"
+          ]
+        },
+        {
+          "canonicalForm": "Bacon",
+          "list": [
+            "bacon"
+          ]
+        },
+        {
+          "canonicalForm": "Sauce Barbecue",
+          "list": [
+            "sauce barbecue",
+            "sauce bbq",
+            "bbq",
+            "sauce barbec"
+          ]
+        },
+        {
+          "canonicalForm": "Piments Banane",
+          "list": [
+            "piment banane",
+            "piments bananes",
+            "poivron jaune",
+            "poivrons jaunes",
+            "piment jaune",
+            "piments jaunes"
+          ]
+        },
+        {
+          "canonicalForm": "Poivrons",
+          "list": [
+            "poivrons",
+            "poivrons verts",
+            "piment",
+            "piment vert",
+            "poivron vert",
+            "poivron",
+            "piment verts",
+            "piments verts"
+          ]
+        },
+        {
+          "canonicalForm": "Poivrons Rouges",
+          "list": [
+            "poivrons rouges",
+            "poivron rouge",
+            "piment rouge",
+            "piment rouges"
+          ]
+        },
+        {
+          "canonicalForm": "Mozzarella",
+          "list": [
+            "mozzarella",
+            "mozarella",
+            "mozarela",
+            "mozza",
+            "moza"
+          ]
+        },
+        {
+          "canonicalForm": "Poulet",
+          "list": [
+            "poulet",
+            "volaille"
+          ]
+        },
+        {
+          "canonicalForm": "Boeuf HachÃ©",
+          "list": [
+            "steak hachÃ©",
+            "steak hache",
+            "boeuf hachÃ©",
+            "boeuf hache"
+          ]
+        },
+        {
+          "canonicalForm": "Broccoli",
+          "list": [
+            "brocoli",
+            "broccoli"
+          ]
+        },
+        {
+          "canonicalForm": "Olives Noires",
+          "list": [
+            "olive",
+            "olives",
+            "olives noires",
+            "olives noirs",
+            "olive noires",
+            "olive noir",
+            "olive noire"
+          ]
+        },
+        {
+          "canonicalForm": "Olives Vertes",
+          "list": [
+            "olives vertes",
+            "olive vert",
+            "olives verte",
+            "olives vert",
+            "olive vertes",
+            "olive verte"
+          ]
+        },
+        {
+          "canonicalForm": "Jambon",
+          "list": [
+            "jambon",
+            "cube de jambon",
+            "cubes de jambon"
+          ]
+        },
+        {
+          "canonicalForm": "Fromage",
+          "list": [
+            "fromage"
+          ]
+        },
+        {
+          "canonicalForm": "Cheddar",
+          "list": [
+            "cheddar",
+            "chedar",
+            "fromage cheddar"
+          ]
+        },
+        {
+          "canonicalForm": "Parmesan",
+          "list": [
+            "parmesan",
+            "fromage parmesan"
+          ]
+        },
+        {
+          "canonicalForm": "MaÃ¯s",
+          "list": [
+            "maÃ¯s",
+            "mais",
+            "grains de maÃ¯s",
+            "grain de mais",
+            "grains maÃ¯s",
+            "grain mais"
+          ]
+        },
+        {
+          "canonicalForm": "Tomates",
+          "list": [
+            "tomate",
+            "tomates"
+          ]
+        },
+        {
+          "canonicalForm": "Ã‰pinards",
+          "list": [
+            "Ã©pinards",
+            "Ã©pinard",
+            "epinard"
+          ]
+        },
+        {
+          "canonicalForm": "Tomates SÃ©chÃ©es",
+          "list": [
+            "tomates sÃ©chÃ©es",
+            "tomates sechÃ©es au soleil",
+            "tomate sechÃ©e",
+            "tomate sechÃ©",
+            "tomates sechees",
+            "tomate sechee",
+            "tomate seche"
+          ]
+        },
+        {
+          "canonicalForm": "Dinde",
+          "list": [
+            "dinde"
+          ]
+        },
+        {
+          "canonicalForm": "Sauce Ranch",
+          "list": [
+            "sauce ranch",
+            "ranch"
+          ]
+        },
+        {
+          "canonicalForm": "Ananas",
+          "list": [
+            "ananas",
+            "tranches d'ananas",
+            "tranche ananas",
+            "anana"
+          ]
+        },
+        {
+          "canonicalForm": "Pesto",
+          "list": [
+            "sauce pesto",
+            "pesto"
+          ]
+        },
+        {
+          "canonicalForm": "Pepperoni",
+          "list": [
+            "pepperonis",
+            "pepperoni",
+            "peperoni"
+          ]
+        },
+        {
+          "canonicalForm": "Salami",
+          "list": [
+            "salami",
+            "salamis"
+          ]
+        },
+        {
+          "canonicalForm": "Oignons",
+          "list": [
+            "oignons",
+            "oignon",
+            "ognons",
+            "onions",
+            "onion"
+          ]
+        },
+        {
+          "canonicalForm": "Champignons",
+          "list": [
+            "champis",
+            "champignons"
+          ]
+        },
+        {
+          "canonicalForm": "Boulettes de Viande",
+          "list": [
+            "boulettes de viande",
+            "boulettes de viande hachÃ©e",
+            "boulettes viande",
+            "boulettes"
+          ]
+        },
+        {
+          "canonicalForm": "Jalapeno",
+          "list": [
+            "piment fort",
+            "jalapeÃ±o",
+            "piment jalapeÃ±o",
+            "jalapeno",
+            "piment jalapeno"
+          ]
+        },
+        {
+          "canonicalForm": "Sauce Forte",
+          "list": [
+            "sauce forte",
+            "sauce piquante"
+          ]
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "prebuiltEntities": [
+    {
+      "name": "datetimeV2",
+      "roles": []
+    },
+    {
+      "name": "number",
+      "roles": []
+    },
+    {
+      "name": "phoneNumber",
+      "roles": []
+    }
+  ],
+  "utterances": [
+    {
+      "text": "4 personnes à 18h",
+      "intent": "Reserver",
+      "entities": [
+        {
+          "entity": "Reservation",
+          "startPos": 0,
+          "endPos": 16,
+          "children": [
+            {
+              "entity": "Reservation.NumberOfPlaces",
+              "startPos": 0,
+              "endPos": 0,
+              "children": []
+            },
+            {
+              "entity": "Reservation.Time",
+              "startPos": 14,
+              "endPos": 16,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "abort",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "ajouter une pizza avec pepperoni et avec mozzarella",
+      "intent": "ModifyOrder",
+      "entities": [
+        {
+          "entity": "PizzaOrder",
+          "startPos": 8,
+          "endPos": 50,
+          "children": [
+            {
+              "entity": "PizzaOrder.Pizza",
+              "startPos": 8,
+              "endPos": 50,
+              "children": [
+                {
+                  "entity": "Pizza.ToppingModifier",
+                  "startPos": 36,
+                  "endPos": 50,
+                  "children": [
+                    {
+                      "entity": "Topping",
+                      "startPos": 41,
+                      "endPos": 50,
+                      "children": []
+                    },
+                    {
+                      "entity": "Modifier",
+                      "startPos": 36,
+                      "endPos": 39,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "entity": "Pizza.ToppingModifier",
+                  "startPos": 18,
+                  "endPos": 31,
+                  "children": [
+                    {
+                      "entity": "Modifier",
+                      "startPos": 18,
+                      "endPos": 21,
+                      "children": []
+                    },
+                    {
+                      "entity": "Topping",
+                      "startPos": 23,
+                      "endPos": 31,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "entity": "Pizza.Quantity",
+                  "startPos": 8,
+                  "endPos": 10,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "cancel",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "check my account balance",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "commander une pizza pepperoni fromage",
+      "intent": "ModifyOrder",
+      "entities": [
+        {
+          "entity": "PizzaOrder",
+          "startPos": 10,
+          "endPos": 36,
+          "children": [
+            {
+              "entity": "PizzaOrder.Pizza",
+              "startPos": 10,
+              "endPos": 36,
+              "children": [
+                {
+                  "entity": "Pizza.Quantity",
+                  "startPos": 10,
+                  "endPos": 12,
+                  "children": []
+                },
+                {
+                  "entity": "Pizza.ToppingModifier",
+                  "startPos": 30,
+                  "endPos": 36,
+                  "children": [
+                    {
+                      "entity": "Topping",
+                      "startPos": 30,
+                      "endPos": 36,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "entity": "Pizza.ToppingModifier",
+                  "startPos": 20,
+                  "endPos": 28,
+                  "children": [
+                    {
+                      "entity": "Topping",
+                      "startPos": 20,
+                      "endPos": 28,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "dã©verouiller ma porte",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "do unicorns really exist",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "duck",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "end this now",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "est-ce qu'il fait beau aujourd'hui",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "est-ce qu'il va pleuvoir ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "est-ce que les licornes existent vraiment",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "exit",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "farewell",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "forget about it",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "how do you work",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "i need help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "i need some assistance",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "im stuck",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "is it going to rain?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je veux réserver une table pour demain",
+      "intent": "Reserver",
+      "entities": [
+        {
+          "entity": "Reservation",
+          "startPos": 8,
+          "endPos": 37,
+          "children": [
+            {
+              "entity": "Reservation.Time",
+              "startPos": 32,
+              "endPos": 37,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "just stop already",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "never mind",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "où est ma voiture ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ouvrir la lumière",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "place an item on hold",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "quit",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "réserver pour 5 personne mardi prochain",
+      "intent": "Reserver",
+      "entities": [
+        {
+          "entity": "Reservation",
+          "startPos": 0,
+          "endPos": 38,
+          "children": [
+            {
+              "entity": "Reservation.Time",
+              "startPos": 25,
+              "endPos": 38,
+              "children": []
+            },
+            {
+              "entity": "Reservation.NumberOfPlaces",
+              "startPos": 14,
+              "endPos": 14,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "réserver pour trois personnes",
+      "intent": "Reserver",
+      "entities": [
+        {
+          "entity": "Reservation",
+          "startPos": 0,
+          "endPos": 28,
+          "children": [
+            {
+              "entity": "Reservation.NumberOfPlaces",
+              "startPos": 14,
+              "endPos": 18,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "réserver une place pour 2",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "turn on the lights",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "une table pour 10 dans 5 jours",
+      "intent": "Reserver",
+      "entities": [
+        {
+          "entity": "Reservation",
+          "startPos": 0,
+          "endPos": 29,
+          "children": [
+            {
+              "entity": "Reservation.Time",
+              "startPos": 18,
+              "endPos": 29,
+              "children": []
+            },
+            {
+              "entity": "Reservation.NumberOfPlaces",
+              "startPos": 15,
+              "endPos": 16,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "une table pour 6",
+      "intent": "Reserver",
+      "entities": [
+        {
+          "entity": "Reservation",
+          "startPos": 0,
+          "endPos": 15,
+          "children": [
+            {
+              "entity": "Reservation.NumberOfPlaces",
+              "startPos": 15,
+              "endPos": 15,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "voir mon compte en banque",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what can you do",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what can you help me with",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "where is my car?",
+      "intent": "None",
+      "entities": []
+    }
+  ],
+  "versionId": "0.1.1",
+  "name": "TP2_veilletechno",
+  "desc": "New technology exploration project. Conversational bot.",
+  "culture": "fr-fr",
+  "tokenizerVersion": "1.0.0",
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "phraselists": [],
+  "regex_features": [],
+  "patterns": [],
+  "settings": [
+    {
+      "name": "NormalizeDiacritics",
+      "value": "true"
+    }
+  ]
+}
