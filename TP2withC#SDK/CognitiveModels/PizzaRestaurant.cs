@@ -25,7 +25,7 @@ namespace Microsoft.BotBuilderSamples
         };
         public Dictionary<Intent, IntentScore> Intents;
 
-        public class Entities
+        public class _Entities
         {
             public object[] Reservation;
 
@@ -40,7 +40,7 @@ namespace Microsoft.BotBuilderSamples
             //[JsonProperty("$instance")]
             //public _Instance _instance;
         }
-        public Entities Entites;
+        public _Entities Entities;
 
         [JsonExtensionData(ReadData = true, WriteData = true)]
         public IDictionary<string, object> Properties {get; set; }
@@ -51,7 +51,7 @@ namespace Microsoft.BotBuilderSamples
             Text = app.Text;
             AlteredText = app.AlteredText;
             Intents = app.Intents;
-            Entites = app.Entities;
+            Entities = app.Entities;
             Properties = app.Properties;
         }
 

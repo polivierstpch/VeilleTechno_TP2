@@ -72,7 +72,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                     //await ShowWarningForUnsupportedCities(stepContext.Context, luisResult, cancellationToken);
 
                     // Initialize BookingDetails with any entities we may have found in the response.
-                    var reservationDetails = luisResult.Entites.Reservation;//new ReservationDetails()
+                    var reservationDetails = luisResult.Entities.Reservation;//new ReservationDetails()
                     //{
                         // Get destination and origin from the composite entities arrays.
                         //Time = luisResult.Entities.Reservation.Time,
