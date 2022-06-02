@@ -28,10 +28,10 @@ namespace Microsoft.BotBuilderSamples
         {
 
             // Built-in entities
-            //public DateTimeSpec[] datetime;
+            public DateTimeSpec[] datetime;
 
             // Lists
-            public string[][] Reservation;
+            public string[] Reservation;
 
             // Composites
             public class _InstanceFrom
@@ -62,7 +62,7 @@ namespace Microsoft.BotBuilderSamples
             public class _Instance
             {
                 //public InstanceData[] datetime;
-                public InstanceData[] Rservation;
+                public InstanceData[] Reservation;
                 //public InstanceData[] From;
                 //public InstanceData[] To;
             }
