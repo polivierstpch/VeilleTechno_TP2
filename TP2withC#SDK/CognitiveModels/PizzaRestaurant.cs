@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using TP2withSDK.Entities;
+using System;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -27,7 +28,15 @@ namespace Microsoft.BotBuilderSamples
 
         public class _Entities
         {
+
+            public int NumberOfPlaces;
+            public string Name;
+            public string PhoneNumber;
+            public string Date;
+            public string Time;
+            public string Notes;
             public object[] Reservation;
+
 
             // Instance
             //public class _Instance

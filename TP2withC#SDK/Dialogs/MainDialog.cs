@@ -70,14 +70,19 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             {
                 case PizzaRestaurant.Intent.Reserver:
                     //await ShowWarningForUnsupportedCities(stepContext.Context, luisResult, cancellationToken);
+                    var reservationDetails = (ReservationDetails)luisResult.Entities.Reservation[0];
 
-                    // Initialize BookingDetails with any entities we may have found in the response.
-                    var reservationDetails = luisResult.Entities.Reservation;//new ReservationDetails()
+                    //Initialize BookingDetails with any entities we may have found in the response.
+                    //var reservationDetails = new ReservationDetails()
                     //{
-                        // Get destination and origin from the composite entities arrays.
-                        //Time = luisResult.Entities.Reservation.Time,
-                        //NumberOfPlaces = luisResult.Entities.NumberOfPlaces,
-                        //Client = luisResult.Entities.ClientEntities,
+                    //    NumberOfPlaces = luisResult.Entities.Reservation
+                    //};
+
+                    //{
+                    // Get destination and origin from the composite entities arrays.
+                    //Time = luisResult.Entities.Reservation.Time,
+                    //NumberOfPlaces = luisResult.Entities.NumberOfPlaces,
+                    //Client = luisResult.Entities.ClientEntities,
                     //};
 
                     // Run the BookingDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.

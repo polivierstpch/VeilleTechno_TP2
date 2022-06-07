@@ -7,10 +7,10 @@ namespace TP2withSDK.Entities
 {
     public class ReservationDetails
     {
-        public DateTime Time { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
         public int NumberOfPlaces { get; set; }
         public Client Client { get; set; }
-        public string Specification { get; set; }
         public string Notes { get; set; }
     }
 
