@@ -23,7 +23,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
         protected readonly ILogger Logger;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, ILogger<MainDialog> logger)
+        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, AnnulerReservationDialog annulationDialog, ILogger<MainDialog> logger)
             : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
@@ -31,6 +31,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(reservationDialog);
+            AddDialog(annulationDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 IntroStepAsync,
@@ -72,28 +73,24 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             {
                 case PizzaRestaurant.Intent.Reserver:
                     var reservation = luisResult.ReservationEntities;
-                    //await ShowWarningForUnsupportedCities(stepContext.Context, luisResult, cancellationToken);
-                    //var reservationDetails = (ReservationDetails)luisResult.Entities.Reservation;
-
                     var reservationDetails = new ReservationDetails()
                     {
                             NumberOfPlaces = reservation.NumberOfPlaces > 0 ? reservation.NumberOfPlaces.Value : -1,
-                            Date = reservation.Date, //Convert.ToDateTime(reservation.Date, new CultureInfo("fr-CA")).Date,
+                            Date = reservation.Date, 
                             Client = new Client() { PhoneNumber = reservation.NumeroTelephoneClient, Name = reservation.NomClient },
                             Time = reservation.Time
                     };
 
                     return await stepContext.BeginDialogAsync(nameof(AjoutReservationDialog), reservationDetails, cancellationToken);
-                //case PizzaRestaurant.Intent.GetWeather:
-                //    // We haven't implemented the GetWeatherDialog so we just display a TODO message.
-                //    var getWeatherMessageText = "TODO: get weather flow here";
-                //    var getWeatherMessage = MessageFactory.Text(getWeatherMessageText, getWeatherMessageText, InputHints.IgnoringInput);
-                //    await stepContext.Context.SendActivityAsync(getWeatherMessage, cancellationToken);
-                //    break;
+
+                case PizzaRestaurant.Intent.AnnulerReservation:
+                    var numReservation = luisResult.AnnulationEntities.NumeroDeReservation; 
+                    return await stepContext.BeginDialogAsync(nameof(AnnulerReservationDialog), numReservation, cancellationToken);
+                
 
                 default:
                     // Catch all for unhandled intents
-                    var didntUnderstandMessageText = $"Sorry, I didn't get that. Please try asking in a different way (intent was {luisResult.TopIntent().intent})";
+                    var didntUnderstandMessageText = $"Désolé, je n'ai pas compris ce que vous voulez faire (intent was {luisResult.TopIntent().intent})";
                     var didntUnderstandMessage = MessageFactory.Text(didntUnderstandMessageText, didntUnderstandMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(didntUnderstandMessage, cancellationToken);
                     break;
@@ -101,33 +98,6 @@ namespace Microsoft.BotBuilderSamples.Dialogs
 
             return await stepContext.NextAsync(null, cancellationToken);
         }
-
-        // Shows a warning if the requested From or To cities are recognized as entities but they are not in the Airport entity list.
-        // In some cases LUIS will recognize the From and To composite entities as a valid cities but the From and To Airport values
-        // will be empty if those entity values can't be mapped to a canonical item in the Airport.
-        //private static async Task ShowWarningForUnsupportedCities(ITurnContext context, PizzaRestaurant luisResult, CancellationToken cancellationToken)
-        //{
-        //    var unsupportedCities = new List<string>();
-
-        //    var fromEntities = luisResult.FromEntities;
-        //    if (!string.IsNullOrEmpty(fromEntities.From) && string.IsNullOrEmpty(fromEntities.Airport))
-        //    {
-        //        unsupportedCities.Add(fromEntities.From);
-        //    }
-
-        //    var toEntities = luisResult.ToEntities;
-        //    if (!string.IsNullOrEmpty(toEntities.To) && string.IsNullOrEmpty(toEntities.Airport))
-        //    {
-        //        unsupportedCities.Add(toEntities.To);
-        //    }
-
-        //    if (unsupportedCities.Any())
-        //    {
-        //        var messageText = $"Sorry but the following airports are not supported: {string.Join(',', unsupportedCities)}";
-        //        var message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
-        //        await context.SendActivityAsync(message, cancellationToken);
-        //    }
-        //}
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {

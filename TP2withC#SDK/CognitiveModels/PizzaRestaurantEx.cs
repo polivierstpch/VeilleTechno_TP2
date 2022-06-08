@@ -21,6 +21,15 @@ namespace Microsoft.BotBuilderSamples
             }
         }
 
+        public (int? NumeroDeReservation, string RIEN) AnnulationEntities
+        {
+            get
+            {
+                var numReservation = Entities?.Annulation?.FirstOrDefault()?.NumeroDeReservation?.FirstOrDefault();
+                return (numReservation, "");
+            }
+        }
+
         //public (string To, string Airport) ToEntities
         //{
         //    get

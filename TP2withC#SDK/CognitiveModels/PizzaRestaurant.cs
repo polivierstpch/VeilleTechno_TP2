@@ -38,6 +38,12 @@ namespace Microsoft.BotBuilderSamples
                 public string[] Name;
             }
             public ReservationClass[] Reservation;
+
+            public class AnnulationClass
+            {
+                public int[] NumeroDeReservation;
+            }
+            public AnnulationClass[] Annulation;
         }
         public _Entities Entities;
 

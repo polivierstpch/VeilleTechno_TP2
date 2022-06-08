@@ -39,8 +39,9 @@ namespace Microsoft.BotBuilderSamples
             // Register LUIS recognizer
             services.AddSingleton<PizzaRestaurantRecognizer>();
 
-            // Register the BookingDialog.
+            // Register dialogs.
             services.AddSingleton<AjoutReservationDialog>();
+            services.AddSingleton<AnnulerReservationDialog>();
 
             // The MainDialog that will be run by the bot.
             services.AddSingleton<MainDialog>();

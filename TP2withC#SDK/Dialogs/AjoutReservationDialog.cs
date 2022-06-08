@@ -45,7 +45,7 @@ namespace TP2withSDK.Dialogs
         private async Task<DialogTurnResult> NbPersonnesStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             var reservationDetails = (ReservationDetails)stepContext.Options;
-           
+            await stepContext.Context.SendActivityAsync("Bienvenue dans l'assistant de réservation!");
             if (reservationDetails.NumberOfPlaces <= 0)
             {
 
