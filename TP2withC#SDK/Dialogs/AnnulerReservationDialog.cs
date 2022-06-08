@@ -31,54 +31,51 @@ namespace TP2withSDK.Dialogs
 
         private async Task<DialogTurnResult> ConfirmationStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-
+            
             var numReservation = (int)stepContext.Options;
 
             var promptMessage = MessageFactory.Text("Vous désirez annuler votre réservation?");
             return await stepContext.PromptAsync(nameof(ConfirmPrompt), new PromptOptions { Prompt = promptMessage}, cancellationToken);
 
-            //return await stepContext.NextAsync(numReservation, cancellationToken);
         }
 
 
         private async Task<DialogTurnResult> NumReservationStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
 
-            var numReservation = (int)stepContext.Options;
-            if(numReservation == -1)
+            if(!(bool)stepContext.Result)
             {
-                var promptMessage = MessageFactory.Text("Quel est votre numéro de commande (100 à 999)?", "Quel est votre numéro de commande (100 à 999)?");
-                var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
-                return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
+                return await stepContext.EndDialogAsync(null, cancellationToken);
             }
-            else if (numReservation < 100 || numReservation > 999)
+            else
             {
+                var numReservation = (int)stepContext.Options;
+                if (numReservation == -1)
+                {
+                    var promptMessage = MessageFactory.Text("Quel est votre numéro de commande (100 à 999)?", "Quel est votre numéro de commande (100 à 999)?");
+                    var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
+                    return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
+                }
+                else if (numReservation < 100 || numReservation > 999)
+                {
 
-                var promptMessage = MessageFactory.Text("Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999", "Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999");
-                var retryPrompt = MessageFactory.Text("Veuillez entrer une nombre de personnes valide", "Veuillez entrer une nombre de personnes valide");
-                return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
+                    var promptMessage = MessageFactory.Text("Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999", "Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999");
+                    var retryPrompt = MessageFactory.Text("Veuillez entrer une nombre de personnes valide", "Veuillez entrer une nombre de personnes valide");
+                    return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
 
+                }
+
+                return await stepContext.NextAsync(numReservation, cancellationToken);
             }
-
-            return await stepContext.NextAsync(numReservation, cancellationToken);
+            
         }
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var numReservation = stepContext.Options;
-            //var reservationDetails = (ReservationDetails)stepContext.Options;
-            var reservationDetails = new ReservationDetails();
-            reservationDetails.Client.PhoneNumber = (string)stepContext.Result;
-            var messageFinal = String.Format("Merci pour votre réservation! Votre numéro de réservation est le {0}. Notez ce numéro si vous devez annuler votre réservation. Vos informations: \n Nombre de personnes: {1} \n Date: {2} \n Heure: {3} \n Nom: {4} \n Numéro de téléphone: {5}"
-                , reservationDetails.NumReservation,
-                reservationDetails.NumberOfPlaces,
-                reservationDetails.Date,
-                reservationDetails.Time,
-                reservationDetails.Client.Name,
-                reservationDetails.Client.PhoneNumber);
-            await stepContext.Context.SendActivityAsync(messageFinal);
+            var numReservation = stepContext.Result;
+            await stepContext.Context.SendActivityAsync($"La réservation #{numReservation} a été annulée. Veuillez réutiliser notre assistant pour une nouvelle réservation!");
 
-            return await stepContext.EndDialogAsync(reservationDetails, cancellationToken);
+            return await stepContext.EndDialogAsync(null, cancellationToken);
         }
 
         private static Task<bool> NumReservationPromptValidatorAsync(PromptValidatorContext<int> promptContext, CancellationToken cancellationToken)
