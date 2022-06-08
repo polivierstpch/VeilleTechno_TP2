@@ -16,8 +16,8 @@ namespace TP2withSDK.Dialogs
     public class AjoutReservationDialog : CancelAndHelpDialog
     {
         private const string PlacesStepMsgText = "Pour combien de personnes voulez-vous réserver?";
-
-        public AjoutReservationDialog()
+        private Data PizzeriaData;
+        public AjoutReservationDialog(Data data)
             : base(nameof(AjoutReservationDialog))
         {
             AddDialog(new TextPrompt(nameof(TextPrompt)));
@@ -37,7 +37,7 @@ namespace TP2withSDK.Dialogs
                 NumTelStepAsync,
                 FinalStepAsync,
             }));
-
+            PizzeriaData = data;
             // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
         }
@@ -134,7 +134,7 @@ namespace TP2withSDK.Dialogs
                 reservationDetails.Client.Name, 
                 reservationDetails.Client.PhoneNumber);
             await stepContext.Context.SendActivityAsync(messageFinal);
-
+            PizzeriaData.ListeReservations.Add(reservationDetails);
             return await stepContext.EndDialogAsync(reservationDetails, cancellationToken);
         }
 

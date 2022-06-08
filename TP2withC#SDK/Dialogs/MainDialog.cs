@@ -12,6 +12,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
+using TP2withSDK;
 using TP2withSDK.Dialogs;
 using TP2withSDK.Entities;
 
@@ -21,14 +22,15 @@ namespace Microsoft.BotBuilderSamples.Dialogs
     {
         private readonly PizzaRestaurantRecognizer _luisRecognizer;
         protected readonly ILogger Logger;
+        private Data PizzeriaData;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, AnnulerReservationDialog annulationDialog, ILogger<MainDialog> logger)
+        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, AnnulerReservationDialog annulationDialog, ILogger<MainDialog> logger, Data data)
             : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
             Logger = logger;
-
+            PizzeriaData = data;
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(reservationDialog);
             AddDialog(annulationDialog);
@@ -41,6 +43,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
 
             // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
+            
         }
 
         private async Task<DialogTurnResult> IntroStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
