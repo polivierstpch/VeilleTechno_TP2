@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
+using TP2withSDK.Dialogs;
 using TP2withSDK.Entities;
 
 namespace Microsoft.BotBuilderSamples.Dialogs
@@ -21,14 +23,14 @@ namespace Microsoft.BotBuilderSamples.Dialogs
         protected readonly ILogger Logger;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, BookingDialog bookingDialog, ILogger<MainDialog> logger)
+        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, ILogger<MainDialog> logger)
             : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
             Logger = logger;
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
-            AddDialog(bookingDialog);
+            AddDialog(reservationDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 IntroStepAsync,
@@ -69,25 +71,20 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             switch (luisResult.TopIntent().intent)
             {
                 case PizzaRestaurant.Intent.Reserver:
+                    var reservation = luisResult.ReservationEntities;
                     //await ShowWarningForUnsupportedCities(stepContext.Context, luisResult, cancellationToken);
-                    var reservationDetails = (ReservationDetails)luisResult.Entities.Reservation[0];
+                    //var reservationDetails = (ReservationDetails)luisResult.Entities.Reservation;
 
-                    //Initialize BookingDetails with any entities we may have found in the response.
-                    //var reservationDetails = new ReservationDetails()
-                    //{
-                    //    NumberOfPlaces = luisResult.Entities.Reservation
-                    //};
+                    var reservationDetails = new ReservationDetails()
+                        {
+                            NumberOfPlaces = reservation.NumberOfPlaces > 0 ? reservation.NumberOfPlaces.Value : -1,
+                            Date = Convert.ToDateTime(reservation.Date, new CultureInfo("fr-CA")).Date
+                        };
 
-                    //{
-                    // Get destination and origin from the composite entities arrays.
-                    //Time = luisResult.Entities.Reservation.Time,
-                    //NumberOfPlaces = luisResult.Entities.NumberOfPlaces,
-                    //Client = luisResult.Entities.ClientEntities,
-                    //};
 
                     // Run the BookingDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
                     //return await stepContext.BeginDialogAsync(nameof(BookingDialog), bookingDetails, cancellationToken);
-                    return await stepContext.BeginDialogAsync(nameof(MainDialog), null, cancellationToken);
+                    return await stepContext.BeginDialogAsync(nameof(AjoutReservationDialog), reservationDetails, cancellationToken);
                 case PizzaRestaurant.Intent.GetWeather:
                     // We haven't implemented the GetWeatherDialog so we just display a TODO message.
                     var getWeatherMessageText = "TODO: get weather flow here";

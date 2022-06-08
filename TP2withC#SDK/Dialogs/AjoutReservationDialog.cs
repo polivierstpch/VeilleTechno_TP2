@@ -14,6 +14,7 @@ namespace TP2withSDK.Dialogs
     {
         private const string DatetimeStepMsgText = "À quelle heure voulez-vous réserver?";
         private const string OriginStepMsgText = "Where are you traveling from?";
+        private const string PlacesStepMsgText = "Pour combien de personnes voulez-vous réserver?";
 
         public AjoutReservationDialog()
             : base(nameof(AjoutReservationDialog))
@@ -23,7 +24,7 @@ namespace TP2withSDK.Dialogs
             AddDialog(new DateResolverDialog());
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
-                DateTimeStepAsync,
+                NbPersonnesStepAsync,
                 //OriginStepAsync,
                 //TravelDateStepAsync,
                 //ConfirmStepAsync,
@@ -34,17 +35,17 @@ namespace TP2withSDK.Dialogs
             InitialDialogId = nameof(WaterfallDialog);
         }
 
-        private async Task<DialogTurnResult> DateTimeStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> NbPersonnesStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var bookingDetails = (ReservationDetails)stepContext.Options;
+            var reservationDetails = (ReservationDetails)stepContext.Options;
 
-            if (bookingDetails.Time == null)
+            if (reservationDetails.NumberOfPlaces <= 0)
             {
-                var promptMessage = MessageFactory.Text(DatetimeStepMsgText, DatetimeStepMsgText, InputHints.ExpectingInput);
+                var promptMessage = MessageFactory.Text(PlacesStepMsgText, PlacesStepMsgText, InputHints.ExpectingInput);
                 return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
             }
 
-            return await stepContext.NextAsync(bookingDetails.Time, cancellationToken);
+            return await stepContext.NextAsync(reservationDetails.NumberOfPlaces, cancellationToken);
         }
 
         private async Task<DialogTurnResult> OriginStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)

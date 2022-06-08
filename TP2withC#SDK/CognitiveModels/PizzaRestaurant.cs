@@ -28,22 +28,34 @@ namespace Microsoft.BotBuilderSamples
 
         public class _Entities
         {
-
-            public int NumberOfPlaces;
             public string Name;
             public string PhoneNumber;
-            public string Date;
-            public string Time;
+            public DateTime Time;
             public string Notes;
-            public object[] Reservation;
+            public int NumberOfPlaces;
+            public DateTimeSpec Date;
+            //public object[] Reservation;
 
+            //public class _InstanceReservation
+            //{
+            //    public InstanceData[] NumberOfPlaces;
+            //    public InstanceData[] Date;
+            //}
 
-            // Instance
+            public class ReservationClass
+            {
+                public int[] NumberOfPlaces;
+                public string[] Date;
+                //[JsonProperty("$instance")]
+                //public _InstanceReservation _instance;
+            }
+            public ReservationClass[] Reservation;
+            //Instance
             //public class _Instance
             //{
             //    //public InstanceData[] NumberOfPlaces;
             //    public InstanceData[] Reservation;
-            //    //public InstanceData[] From;
+            //    //public InstanceData[] Date;
             //    //public InstanceData[] To;
             //}
             //[JsonProperty("$instance")]
@@ -78,5 +90,6 @@ namespace Microsoft.BotBuilderSamples
             }
             return (maxIntent, max);
         }
+
     }
 }

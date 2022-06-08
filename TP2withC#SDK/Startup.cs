@@ -10,6 +10,7 @@ using Microsoft.BotBuilderSamples.Bots;
 using Microsoft.BotBuilderSamples.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TP2withSDK.Dialogs;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -39,7 +40,7 @@ namespace Microsoft.BotBuilderSamples
             services.AddSingleton<PizzaRestaurantRecognizer>();
 
             // Register the BookingDialog.
-            services.AddSingleton<BookingDialog>();
+            services.AddSingleton<AjoutReservationDialog>();
 
             // The MainDialog that will be run by the bot.
             services.AddSingleton<MainDialog>();
