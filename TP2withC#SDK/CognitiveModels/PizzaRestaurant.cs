@@ -19,7 +19,11 @@ namespace Microsoft.BotBuilderSamples
         public string AlteredText;
         public enum Intent {
             None,
-            Reserver
+            Reserver,
+            Commander,
+            AnnulerReservation,
+            StatusCommande,
+            Satisfaction
         };
         public Dictionary<Intent, IntentScore> Intents;
 

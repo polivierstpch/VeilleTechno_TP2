@@ -76,15 +76,13 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                     //var reservationDetails = (ReservationDetails)luisResult.Entities.Reservation;
 
                     var reservationDetails = new ReservationDetails()
-                        {
+                    {
                             NumberOfPlaces = reservation.NumberOfPlaces > 0 ? reservation.NumberOfPlaces.Value : -1,
-                            Date = Convert.ToDateTime(reservation.Date, new CultureInfo("fr-CA")).Date,
-                            Client = new Client() { PhoneNumber = reservation.NumeroTelephoneClient}
-                        };
+                            Date = reservation.Date, //Convert.ToDateTime(reservation.Date, new CultureInfo("fr-CA")).Date,
+                            Client = new Client() { PhoneNumber = reservation.NumeroTelephoneClient, Name = reservation.NomClient },
+                            Time = reservation.Time
+                    };
 
-
-                    // Run the BookingDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                    //return await stepContext.BeginDialogAsync(nameof(BookingDialog), bookingDetails, cancellationToken);
                     return await stepContext.BeginDialogAsync(nameof(AjoutReservationDialog), reservationDetails, cancellationToken);
                 //case PizzaRestaurant.Intent.GetWeather:
                 //    // We haven't implemented the GetWeatherDialog so we just display a TODO message.
@@ -149,7 +147,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             //}
 
             // Restart the main dialog with a different message the second time around
-            var promptMessage = "What else can I do for you?";
+            var promptMessage = "Que puis-je faire d'autre pour vous?";
             return await stepContext.ReplaceDialogAsync(InitialDialogId, promptMessage, cancellationToken);
         }
     }

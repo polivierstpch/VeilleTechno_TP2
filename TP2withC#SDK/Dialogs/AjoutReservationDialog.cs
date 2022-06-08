@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -12,22 +13,25 @@ namespace TP2withSDK.Dialogs
 {
     public class AjoutReservationDialog : CancelAndHelpDialog
     {
-        private const string DatetimeStepMsgText = "À quelle heure voulez-vous réserver?";
-        private const string OriginStepMsgText = "Where are you traveling from?";
         private const string PlacesStepMsgText = "Pour combien de personnes voulez-vous réserver?";
 
         public AjoutReservationDialog()
             : base(nameof(AjoutReservationDialog))
         {
             AddDialog(new TextPrompt(nameof(TextPrompt)));
+            AddDialog(new TextPrompt("Date", DatePromptValidatorAsync));
+            AddDialog(new TextPrompt("Time", TimePromptValidatorAsync));
+            AddDialog(new DateTimePrompt(nameof(DateTimePrompt)));
+            AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), PlacesPromptValidatorAsync));
             AddDialog(new ConfirmPrompt(nameof(ConfirmPrompt)));
             AddDialog(new DateResolverDialog());
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 NbPersonnesStepAsync,
-                //OriginStepAsync,
-                //TravelDateStepAsync,
-                //ConfirmStepAsync,
+                DateStepAsync,
+                TimeStepAsync,
+                NomStepAsync,
+                NumTelStepAsync,
                 FinalStepAsync,
             }));
 
@@ -38,73 +42,128 @@ namespace TP2withSDK.Dialogs
         private async Task<DialogTurnResult> NbPersonnesStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             var reservationDetails = (ReservationDetails)stepContext.Options;
-
+           
             if (reservationDetails.NumberOfPlaces <= 0)
             {
-                var promptMessage = MessageFactory.Text(PlacesStepMsgText, PlacesStepMsgText, InputHints.ExpectingInput);
-                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+
+                var promptMessage = MessageFactory.Text(PlacesStepMsgText, PlacesStepMsgText);
+                var retryPrompt = MessageFactory.Text("Veuillez entrer une nombre de personnes valide", "Veuillez entrer une nombre de personnes valide");
+                return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
+    
             }
 
             return await stepContext.NextAsync(reservationDetails.NumberOfPlaces, cancellationToken);
         }
 
-        //private async Task<DialogTurnResult> OriginStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
-        //{
-        //    var bookingDetails = (BookingDetails)stepContext.Options;
+        private async Task<DialogTurnResult> DateStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var reservationDetails = (ReservationDetails)stepContext.Options;
 
-        //    bookingDetails.Destination = (string)stepContext.Result;
+            reservationDetails.NumberOfPlaces = (int)stepContext.Result;
 
-        //    if (bookingDetails.Origin == null)
-        //    {
-        //        var promptMessage = MessageFactory.Text(OriginStepMsgText, OriginStepMsgText, InputHints.ExpectingInput);
-        //        return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
-        //    }
+            if (string.IsNullOrEmpty(reservationDetails.Date))
+            {
+                var promptMessage = MessageFactory.Text("À quelle date voulez-vous réserver?", "À quelle date voulez-vous réserver?", InputHints.ExpectingInput);
+                var retryPrompt = MessageFactory.Text("Veuillez entrer une date valide", "Veuillez entrer une date valide");
+                return await stepContext.PromptAsync("Date", new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
+            }
 
-        //    return await stepContext.NextAsync(bookingDetails.Origin, cancellationToken);
-        //}
+            return await stepContext.NextAsync(reservationDetails.Date, cancellationToken);
+        }
 
-        //private async Task<DialogTurnResult> TravelDateStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
-        //{
-        //    var bookingDetails = (BookingDetails)stepContext.Options;
+        private async Task<DialogTurnResult> TimeStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var reservationDetails = (ReservationDetails)stepContext.Options;
 
-        //    bookingDetails.Origin = (string)stepContext.Result;
+            reservationDetails.Date = (string)stepContext.Result;
 
-        //    if (bookingDetails.TravelDate == null || IsAmbiguous(bookingDetails.TravelDate))
-        //    {
-        //        return await stepContext.BeginDialogAsync(nameof(DateResolverDialog), bookingDetails.TravelDate, cancellationToken);
-        //    }
+            if (string.IsNullOrEmpty(reservationDetails.Time))
+            {
+                var promptMessage = MessageFactory.Text("À quelle heure voulez-vous réserver (entrez 17h, 18h, 19h ou 20h)?", "À quelle heure voulez-vous réserver (entrez 17h, 18h, 19h ou 20h)?", InputHints.ExpectingInput);
+                var retryPrompt = MessageFactory.Text("Choisissez entre 17h, 18h, 19h ou 20h)?", "Choisissez entre 17h, 18h, 19h ou 20h)?", InputHints.ExpectingInput);
+                return await stepContext.PromptAsync("Time", new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
+            }
 
-        //    return await stepContext.NextAsync(bookingDetails.TravelDate, cancellationToken);
-        //}
+            return await stepContext.NextAsync(reservationDetails.Time, cancellationToken);
+        }
 
-        //private async Task<DialogTurnResult> ConfirmStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
-        //{
-        //    var bookingDetails = (BookingDetails)stepContext.Options;
+        private async Task<DialogTurnResult> NomStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var reservationDetails = (ReservationDetails)stepContext.Options;
 
-        //    bookingDetails.TravelDate = (string)stepContext.Result;
+            reservationDetails.Time = (string)stepContext.Result;
 
-        //    var messageText = $"Please confirm, I have you traveling to: {bookingDetails.Destination} from: {bookingDetails.Origin} on: {bookingDetails.TravelDate}. Is this correct?";
-        //    var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
+            if (string.IsNullOrEmpty(reservationDetails.Client.Name))
+            {
+                var promptMessage = MessageFactory.Text("À quel nom voulez-vous réserver?", "À quel nom voulez-vous réserver?", InputHints.ExpectingInput);
+                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+            }
 
-        //    return await stepContext.PromptAsync(nameof(ConfirmPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
-        //}
+            return await stepContext.NextAsync(reservationDetails.Client.Name, cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> NumTelStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var reservationDetails = (ReservationDetails)stepContext.Options;
+
+            reservationDetails.Client.Name = (string)stepContext.Result;
+
+            if (string.IsNullOrEmpty(reservationDetails.Client.PhoneNumber))
+            {
+                var promptMessage = MessageFactory.Text("Quel est votre numéro de téléphone?", "Quel est votre numéro de téléphone?", InputHints.ExpectingInput);
+                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+            }
+
+            return await stepContext.NextAsync(reservationDetails.Client.PhoneNumber, cancellationToken);
+        }
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            if ((bool)stepContext.Result)
-            {
-                var reservationDetails = (ReservationDetails)stepContext.Options;
+            var reservationDetails = (ReservationDetails)stepContext.Options;
+            reservationDetails.Client.PhoneNumber = (string)stepContext.Result;
+            reservationDetails.NumReservation = GenerateNumReservation();
+            var messageFinal = String.Format("Merci pour votre réservation! Votre numéro de réservation est le {0}. Notez ce numéro si vous devez annuler votre réservation. Vos informations: \n Nombre de personnes: {1} \n Date: {2} \n Heure: {3} \n Nom: {4} \n Numéro de téléphone: {5}" 
+                ,reservationDetails.NumReservation, 
+                reservationDetails.NumberOfPlaces, 
+                reservationDetails.Date, 
+                reservationDetails.Time, 
+                reservationDetails.Client.Name, 
+                reservationDetails.Client.PhoneNumber);
+            await stepContext.Context.SendActivityAsync(messageFinal);
 
-                return await stepContext.EndDialogAsync(reservationDetails, cancellationToken);
-            }
-
-            return await stepContext.EndDialogAsync(null, cancellationToken);
+            return await stepContext.EndDialogAsync(reservationDetails, cancellationToken);
         }
 
         private static bool IsAmbiguous(string timex)
         {
             var timexProperty = new TimexProperty(timex);
             return !timexProperty.Types.Contains(Constants.TimexTypes.Definite);
+        }
+
+        private static Task<bool> PlacesPromptValidatorAsync(PromptValidatorContext<int> promptContext, CancellationToken cancellationToken)
+        {
+            // This condition is our validation rule. You can also change the value at this point.
+            return Task.FromResult(promptContext.Recognized.Succeeded && promptContext.Recognized.Value > 0 && promptContext.Recognized.Value < 20);
+        }
+
+        private static Task<bool> DatePromptValidatorAsync(PromptValidatorContext<string> promptContext, CancellationToken cancellationToken)
+        {
+            var value = DateTime.TryParse(promptContext.Recognized.Value, out DateTime result);
+            // This condition is our validation rule. You can also change the value at this point.
+            return Task.FromResult(promptContext.Recognized.Succeeded && value);
+        }
+
+        private static Task<bool> TimePromptValidatorAsync(PromptValidatorContext<string> promptContext, CancellationToken cancellationToken)
+        {
+            var valide = promptContext.Recognized.Value.ToLower() == "17h" || promptContext.Recognized.Value.ToLower() ==  "18h" || promptContext.Recognized.Value.ToLower() == "19h" || promptContext.Recognized.Value.ToLower() ==  "20h"
+            // This condition is our validation rule. You can also change the value at this point.
+            return Task.FromResult(promptContext.Recognized.Succeeded && valide );
+        }
+
+        private static int GenerateNumReservation()
+        {
+            var rd = new Random();
+            return rd.Next(100, 999);
         }
     }
 }

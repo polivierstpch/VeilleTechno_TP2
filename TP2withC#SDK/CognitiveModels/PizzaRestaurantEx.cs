@@ -8,14 +8,16 @@ namespace Microsoft.BotBuilderSamples
     //Extends the partial FlightBooking class with methods and properties that simplify accessing entities in the luis results
     public partial class PizzaRestaurant
     {
-        public (int? NumberOfPlaces, string Date, string NumeroTelephoneClient) ReservationEntities
+        public (int? NumberOfPlaces, string Date, string NumeroTelephoneClient, string NomClient, string Time) ReservationEntities
         {
             get
             {
-                var numberOfPeopleValue = Entities?.Reservation?.FirstOrDefault()?.NumberOfPlaces.FirstOrDefault();
-                var dateValue = Entities?.Reservation?.FirstOrDefault()?.Date.FirstOrDefault();
-                var numTelClient = Entities?.Reservation?.FirstOrDefault()?.PhoneNumber.FirstOrDefault();
-                return (numberOfPeopleValue, dateValue, numTelClient);
+                var numberOfPeopleValue = Entities?.Reservation?.FirstOrDefault()?.NumberOfPlaces?.FirstOrDefault();
+                var dateValue = Entities?.Reservation?.FirstOrDefault()?.Date?.FirstOrDefault();
+                var numTelClient = Entities?.Reservation?.FirstOrDefault()?.PhoneNumber?.FirstOrDefault();
+                var timeValue = Entities?.Reservation?.FirstOrDefault()?.Time?.FirstOrDefault();
+                var nameValue = Entities?.Reservation?.FirstOrDefault()?.Name?.FirstOrDefault();
+                return (numberOfPeopleValue, dateValue, numTelClient, nameValue, timeValue);
             }
         }
 
