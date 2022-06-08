@@ -63,7 +63,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             if (!_luisRecognizer.IsConfigured)
             {
                 // LUIS is not configured, we just run the BookingDialog path with an empty BookingDetailsInstance.
-                return await stepContext.BeginDialogAsync(nameof(BookingDialog), new BookingDetails(), cancellationToken);
+                //return await stepContext.BeginDialogAsync(nameof(BookingDialog), new BookingDetails(), cancellationToken);
             }
 
             // Call LUIS and gather any potential booking details. (Note the TurnContext has the response to the prompt.)
@@ -78,19 +78,20 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                     var reservationDetails = new ReservationDetails()
                         {
                             NumberOfPlaces = reservation.NumberOfPlaces > 0 ? reservation.NumberOfPlaces.Value : -1,
-                            Date = Convert.ToDateTime(reservation.Date, new CultureInfo("fr-CA")).Date
+                            Date = Convert.ToDateTime(reservation.Date, new CultureInfo("fr-CA")).Date,
+                            Client = new Client() { PhoneNumber = reservation.NumeroTelephoneClient}
                         };
 
 
                     // Run the BookingDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
                     //return await stepContext.BeginDialogAsync(nameof(BookingDialog), bookingDetails, cancellationToken);
                     return await stepContext.BeginDialogAsync(nameof(AjoutReservationDialog), reservationDetails, cancellationToken);
-                case PizzaRestaurant.Intent.GetWeather:
-                    // We haven't implemented the GetWeatherDialog so we just display a TODO message.
-                    var getWeatherMessageText = "TODO: get weather flow here";
-                    var getWeatherMessage = MessageFactory.Text(getWeatherMessageText, getWeatherMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(getWeatherMessage, cancellationToken);
-                    break;
+                //case PizzaRestaurant.Intent.GetWeather:
+                //    // We haven't implemented the GetWeatherDialog so we just display a TODO message.
+                //    var getWeatherMessageText = "TODO: get weather flow here";
+                //    var getWeatherMessage = MessageFactory.Text(getWeatherMessageText, getWeatherMessageText, InputHints.IgnoringInput);
+                //    await stepContext.Context.SendActivityAsync(getWeatherMessage, cancellationToken);
+                //    break;
 
                 default:
                     // Catch all for unhandled intents
@@ -134,18 +135,18 @@ namespace Microsoft.BotBuilderSamples.Dialogs
         {
             // If the child dialog ("BookingDialog") was cancelled, the user failed to confirm or if the intent wasn't BookFlight
             // the Result here will be null.
-            if (stepContext.Result is BookingDetails result)
-            {
-                // Now we have all the booking details call the booking service.
+            //if (stepContext.Result is BookingDetails result)
+            //{
+            //    // Now we have all the booking details call the booking service.
 
-                // If the call to the booking service was successful tell the user.
+            //    // If the call to the booking service was successful tell the user.
 
-                var timeProperty = new TimexProperty(result.TravelDate);
-                var travelDateMsg = timeProperty.ToNaturalLanguage(DateTime.Now);
-                var messageText = $"I have you booked to {result.Destination} from {result.Origin} on {travelDateMsg}";
-                var message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
-                await stepContext.Context.SendActivityAsync(message, cancellationToken);
-            }
+            //    var timeProperty = new TimexProperty(result.TravelDate);
+            //    var travelDateMsg = timeProperty.ToNaturalLanguage(DateTime.Now);
+            //    var messageText = $"I have you booked to {result.Destination} from {result.Origin} on {travelDateMsg}";
+            //    var message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
+            //    await stepContext.Context.SendActivityAsync(message, cancellationToken);
+            //}
 
             // Restart the main dialog with a different message the second time around
             var promptMessage = "What else can I do for you?";

@@ -48,46 +48,46 @@ namespace TP2withSDK.Dialogs
             return await stepContext.NextAsync(reservationDetails.NumberOfPlaces, cancellationToken);
         }
 
-        private async Task<DialogTurnResult> OriginStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
-        {
-            var bookingDetails = (BookingDetails)stepContext.Options;
+        //private async Task<DialogTurnResult> OriginStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        //{
+        //    var bookingDetails = (BookingDetails)stepContext.Options;
 
-            bookingDetails.Destination = (string)stepContext.Result;
+        //    bookingDetails.Destination = (string)stepContext.Result;
 
-            if (bookingDetails.Origin == null)
-            {
-                var promptMessage = MessageFactory.Text(OriginStepMsgText, OriginStepMsgText, InputHints.ExpectingInput);
-                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
-            }
+        //    if (bookingDetails.Origin == null)
+        //    {
+        //        var promptMessage = MessageFactory.Text(OriginStepMsgText, OriginStepMsgText, InputHints.ExpectingInput);
+        //        return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+        //    }
 
-            return await stepContext.NextAsync(bookingDetails.Origin, cancellationToken);
-        }
+        //    return await stepContext.NextAsync(bookingDetails.Origin, cancellationToken);
+        //}
 
-        private async Task<DialogTurnResult> TravelDateStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
-        {
-            var bookingDetails = (BookingDetails)stepContext.Options;
+        //private async Task<DialogTurnResult> TravelDateStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        //{
+        //    var bookingDetails = (BookingDetails)stepContext.Options;
 
-            bookingDetails.Origin = (string)stepContext.Result;
+        //    bookingDetails.Origin = (string)stepContext.Result;
 
-            if (bookingDetails.TravelDate == null || IsAmbiguous(bookingDetails.TravelDate))
-            {
-                return await stepContext.BeginDialogAsync(nameof(DateResolverDialog), bookingDetails.TravelDate, cancellationToken);
-            }
+        //    if (bookingDetails.TravelDate == null || IsAmbiguous(bookingDetails.TravelDate))
+        //    {
+        //        return await stepContext.BeginDialogAsync(nameof(DateResolverDialog), bookingDetails.TravelDate, cancellationToken);
+        //    }
 
-            return await stepContext.NextAsync(bookingDetails.TravelDate, cancellationToken);
-        }
+        //    return await stepContext.NextAsync(bookingDetails.TravelDate, cancellationToken);
+        //}
 
-        private async Task<DialogTurnResult> ConfirmStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
-        {
-            var bookingDetails = (BookingDetails)stepContext.Options;
+        //private async Task<DialogTurnResult> ConfirmStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        //{
+        //    var bookingDetails = (BookingDetails)stepContext.Options;
 
-            bookingDetails.TravelDate = (string)stepContext.Result;
+        //    bookingDetails.TravelDate = (string)stepContext.Result;
 
-            var messageText = $"Please confirm, I have you traveling to: {bookingDetails.Destination} from: {bookingDetails.Origin} on: {bookingDetails.TravelDate}. Is this correct?";
-            var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
+        //    var messageText = $"Please confirm, I have you traveling to: {bookingDetails.Destination} from: {bookingDetails.Origin} on: {bookingDetails.TravelDate}. Is this correct?";
+        //    var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
 
-            return await stepContext.PromptAsync(nameof(ConfirmPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
-        }
+        //    return await stepContext.PromptAsync(nameof(ConfirmPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+        //}
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {

@@ -18,9 +18,6 @@ namespace Microsoft.BotBuilderSamples
         public string Text;
         public string AlteredText;
         public enum Intent {
-            BookFlight,
-            Cancel,
-            GetWeather,
             None,
             Reserver
         };
@@ -28,38 +25,15 @@ namespace Microsoft.BotBuilderSamples
 
         public class _Entities
         {
-            public string Name;
-            public string PhoneNumber;
-            public DateTime Time;
-            public string Notes;
-            public int NumberOfPlaces;
-            public DateTimeSpec Date;
-            //public object[] Reservation;
-
-            //public class _InstanceReservation
-            //{
-            //    public InstanceData[] NumberOfPlaces;
-            //    public InstanceData[] Date;
-            //}
-
             public class ReservationClass
             {
                 public int[] NumberOfPlaces;
                 public string[] Date;
-                //[JsonProperty("$instance")]
-                //public _InstanceReservation _instance;
+                public string[] Time;
+                public string[] PhoneNumber;
+                public string[] Name;
             }
             public ReservationClass[] Reservation;
-            //Instance
-            //public class _Instance
-            //{
-            //    //public InstanceData[] NumberOfPlaces;
-            //    public InstanceData[] Reservation;
-            //    //public InstanceData[] Date;
-            //    //public InstanceData[] To;
-            //}
-            //[JsonProperty("$instance")]
-            //public _Instance _instance;
         }
         public _Entities Entities;
 
