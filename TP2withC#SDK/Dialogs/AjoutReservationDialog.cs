@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -21,6 +23,7 @@ namespace TP2withSDK.Dialogs
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new TextPrompt("Date", DatePromptValidatorAsync));
             AddDialog(new TextPrompt("Time", TimePromptValidatorAsync));
+            AddDialog(new TextPrompt("Numtel", NumTelPromptValidatorAsync));
             AddDialog(new DateTimePrompt(nameof(DateTimePrompt)));
             AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), PlacesPromptValidatorAsync));
             AddDialog(new ConfirmPrompt(nameof(ConfirmPrompt)));
@@ -110,8 +113,9 @@ namespace TP2withSDK.Dialogs
 
             if (string.IsNullOrEmpty(reservationDetails.Client.PhoneNumber))
             {
-                var promptMessage = MessageFactory.Text("Quel est votre numéro de téléphone?", "Quel est votre numéro de téléphone?", InputHints.ExpectingInput);
-                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+                var promptMessage = MessageFactory.Text("Quel est votre numéro de téléphone (ex. 555-555-5555)?", "Quel est votre numéro de téléphone (ex. 555-555-5555)?", InputHints.ExpectingInput);
+                var retryPrompt = MessageFactory.Text("Entrez un format de numéro de téléphone valide (ex.555-555-5555)?", "Entrez un format de numéro de téléphone valide (ex.555-555-5555)?", InputHints.ExpectingInput);
+                return await stepContext.PromptAsync("Numtel", new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
             }
 
             return await stepContext.NextAsync(reservationDetails.Client.PhoneNumber, cancellationToken);
@@ -148,16 +152,34 @@ namespace TP2withSDK.Dialogs
 
         private static Task<bool> DatePromptValidatorAsync(PromptValidatorContext<string> promptContext, CancellationToken cancellationToken)
         {
-            var value = DateTime.TryParse(promptContext.Recognized.Value, out DateTime result);
+            bool value;
+            try
+            {
+                Convert.ToDateTime(promptContext.Recognized.Value, new CultureInfo("fr-ca"));
+                value = true;
+            }
+            catch
+            {
+                value = false;
+            }
+            //var value = DateTime.TryParse(promptContext.Recognized.Value, out DateTime result);
             // This condition is our validation rule. You can also change the value at this point.
             return Task.FromResult(promptContext.Recognized.Succeeded && value);
         }
 
         private static Task<bool> TimePromptValidatorAsync(PromptValidatorContext<string> promptContext, CancellationToken cancellationToken)
         {
-            var valide = promptContext.Recognized.Value.ToLower() == "17h" || promptContext.Recognized.Value.ToLower() ==  "18h" || promptContext.Recognized.Value.ToLower() == "19h" || promptContext.Recognized.Value.ToLower() ==  "20h"
+            var valide = promptContext.Recognized.Value.ToLower() == "17h" || promptContext.Recognized.Value.ToLower() == "18h" || promptContext.Recognized.Value.ToLower() == "19h" || promptContext.Recognized.Value.ToLower() == "20h";
             // This condition is our validation rule. You can also change the value at this point.
             return Task.FromResult(promptContext.Recognized.Succeeded && valide );
+        }
+
+        private static Task<bool> NumTelPromptValidatorAsync(PromptValidatorContext<string> promptContext, CancellationToken cancellationToken)
+        {
+            var regex = new Regex(@"([1]( |-))?[0-9]{3}( |-)[0-9]{3}-[0-9]{4}");
+            var valide = regex.IsMatch(promptContext.Recognized.Value);
+            // This condition is our validation rule. You can also change the value at this point.
+            return Task.FromResult(promptContext.Recognized.Succeeded && valide);
         }
 
         private static int GenerateNumReservation()
