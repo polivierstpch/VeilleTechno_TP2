@@ -32,35 +32,29 @@ namespace TP2withSDK.Extensions
 
         public static Taille ToTaille(this string value)
         {
-            if (string.IsNullOrEmpty(value.Trim()))
-                return Taille.Aucune;
-
             if (Enum.TryParse<Taille>(value, out var enumValue))
                 return enumValue;
-
-            return !StringToTailleMap.ContainsKey(value.ToLower()) ? Taille.Aucune : StringToTailleMap[value];
+            
+            var valToLower = value.ToLower();
+            return !StringToTailleMap.ContainsKey(valToLower) ? StringToTailleMap[valToLower] : default;
         }
 
         public static TypePizza ToTypePizza(this string value)
         {
-            if (string.IsNullOrEmpty(value.Trim()))
-                return default;
-
             if (Enum.TryParse<TypePizza>(value, out var enumValue))
                 return enumValue;
 
-            return !StringToTailleMap.ContainsKey(value.ToLower()) ? default : StringToTypePizzaMap[value];
+            var valToLower = value.ToLower();
+            return !StringToTypePizzaMap.ContainsKey(valToLower) ? StringToTypePizzaMap[valToLower] : default ;
         }
 
         public static TypeCroute ToTypeCroute(this string value)
         {
-            if (string.IsNullOrEmpty(value.Trim()))
-                return default;
-
             if (Enum.TryParse<TypeCroute>(value, out var enumValue))
                 return enumValue;
-
-            return !StringToTailleMap.ContainsKey(value.ToLower()) ? default : StringToTypeCrouteMap[value];
+            
+            var valToLower = value.ToLower();
+            return !StringToTypeCrouteMap.ContainsKey(valToLower) ? StringToTypeCrouteMap[valToLower] : default;
         }
     }
 }

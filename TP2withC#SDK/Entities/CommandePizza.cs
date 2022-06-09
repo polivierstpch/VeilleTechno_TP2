@@ -38,10 +38,11 @@ namespace TP2withSDK.Entities
     
     public class CommandePizza
     {
-        public TypePizza Type;
-        public TypeCroute Croute;
-        public Taille Taille;
-        public int Quantite;
+        public Client Client { get; set; }
+        public TypePizza Type { get; set; }
+        public TypeCroute Croute { get; set; }
+        public Taille Taille { get; set; }
+        public int Quantite { get; set; }
         public int NumCommande { get; set; }
     }
 }
