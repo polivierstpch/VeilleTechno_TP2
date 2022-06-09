@@ -1,8 +1,0 @@
-{
-  "$kind": "Microsoft.LuisRecognizer",
-  "id": "LUIS_TP2_veilletechno_rl_pospc_cmr",
-  "applicationId": "=settings.luis.TP2_veilletechno_rl_pospc_cmr_fr_ca_lu.appId",
-  "version": "=settings.luis.TP2_veilletechno_rl_pospc_cmr_fr_ca_lu.version",
-  "endpoint": "=settings.luis.endpoint",
-  "endpointKey": "=settings.luis.endpointKey"
-}
