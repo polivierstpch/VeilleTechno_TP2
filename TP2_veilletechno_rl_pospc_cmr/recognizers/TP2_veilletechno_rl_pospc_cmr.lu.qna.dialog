@@ -1,6 +1,0 @@
-{
-  "$kind": "Microsoft.CrossTrainedRecognizerSet",
-  "recognizers": [
-    "TP2_veilletechno_rl_pospc_cmr.lu"
-  ]
-}

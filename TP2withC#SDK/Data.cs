@@ -16,9 +16,9 @@ namespace TP2withSDK
             }
         };
 
-        public List<Commande> ListeCommandes = new List<Commande>()
+        public List<CommandePizza> ListeCommandes = new List<CommandePizza>()
         {
-            new Commande()
+            new CommandePizza()
             {
                 NumCommande = 222
             }
