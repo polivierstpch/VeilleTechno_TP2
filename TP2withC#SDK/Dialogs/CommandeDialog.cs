@@ -58,7 +58,9 @@ namespace TP2withSDK.Dialogs
             if (commandePizza.Type == TypePizza.Aucune)
             {
                 var choixPizza = string.Join("\n\n - ", _pizzaTypeChoices);
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Voici le menu de pizza : \n\n{choixPizza}"));
+                await stepContext.Context.SendActivityAsync(
+                    MessageFactory.Text($"Voici le menu de pizza : \n\n - {choixPizza}"),
+                    cancellationToken);
                 return await stepContext.PromptAsync(nameof(ChoicePrompt), new PromptOptions
                 {
                     Prompt = MessageFactory.Text("Veuillez choisir votre type de pizza :"),
@@ -126,7 +128,7 @@ namespace TP2withSDK.Dialogs
             {
                 return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions
                 {
-                    Prompt = MessageFactory.Text("Combien de pizza voulez-vous ?"),
+                    Prompt = MessageFactory.Text("Combien de pizza(s) voulez-vous ?"),
                     RetryPrompt = MessageFactory.Text("Veuillez entrer un nombre de pizza entre 1 et 10.\n\n" +
                                                       "Pour assurer la fraîcheur maximale des produits, nous limitons le nombre de pizza à 10."),
                     Choices = ChoiceFactory.ToChoices(_crustTypeChoices)
@@ -151,7 +153,8 @@ namespace TP2withSDK.Dialogs
             var commandePizza = (CommandePizza)stepContext.Options;
             commandePizza.Client.Name = (string)stepContext.Result;
 
-            var promptMessage = MessageFactory.Text($"Merci {commandePizza.Client.Name.Split(" ").First()}! Il me faudrait ensuite votre numéro de téléphone, s'il-vous-plaît!");
+            var promptMessage = MessageFactory.Text($"Merci {commandePizza.Client.Name.Split(" ").First()}!" +
+                                                    " Il me faudrait ensuite votre numéro de téléphone, s'il-vous-plaît!");
             var retryMessage =
                 MessageFactory.Text("Veuillez entrer un numéro de téléphone valide! (ex.: 555-555-5555)");
             return await stepContext.PromptAsync(NumTelPromptId, new PromptOptions
@@ -169,13 +172,13 @@ namespace TP2withSDK.Dialogs
             var sb = new StringBuilder();
 
             sb.AppendLine("Vos informations de réservation sont les suivantes: \n");
-            sb.AppendLine($"Votre choix de pizza : {commandePizza.Type.GetTextValue()} \n");
-            sb.AppendLine($"Votre grandeur de pizza : {commandePizza.Taille.GetTextValue()} \n");
-            sb.AppendLine($"Votre croûte de pizza : {commandePizza.Croute.GetTextValue()} \n");
-            sb.AppendLine($"Quantité demandée : {commandePizza.Quantite} \n\n");
-            sb.AppendLine($"Renseignements fournis : \n");
-            sb.AppendLine($"Nom : {commandePizza.Client.Name} \n" );
-            sb.AppendLine($"Numéro de téléphone: {commandePizza.Client.PhoneNumber}");
+            sb.AppendLine($" - Votre choix de pizza : {commandePizza.Type.GetTextValue()} \n");
+            sb.AppendLine($" - Votre grandeur de pizza : {commandePizza.Taille.GetTextValue()} \n");
+            sb.AppendLine($" - Votre croûte de pizza : {commandePizza.Croute.GetTextValue()} \n");
+            sb.AppendLine($" - Quantité demandée : {commandePizza.Quantite} \n\n");
+            sb.AppendLine("Renseignements fournis : \n");
+            sb.AppendLine($" - Nom : {commandePizza.Client.Name} \n" );
+            sb.AppendLine($" - Numéro de téléphone: {commandePizza.Client.PhoneNumber}");
 
             await stepContext.Context.SendActivityAsync(sb.ToString(), cancellationToken: cancellationToken);
             
@@ -196,8 +199,9 @@ namespace TP2withSDK.Dialogs
             {
                 commandePizza.NumCommande = GenerateCommandNumber();
                 _pizzeriaData.ListeCommandes.Add(commandePizza);
-                var messageFinal = MessageFactory.Text($"Merci {commandePizza.Client.Name.Split(" ").First()}! Votre numéro de commande est le #{commandePizza.NumCommande}! Veuillez le prendre en note!");
-                await stepContext.Context.SendActivityAsync(messageFinal);
+                var messageFinal = MessageFactory.Text($"Merci {commandePizza.Client.Name.Split(" ").First()}!" + 
+                                                       $" Votre numéro de commande est le #{commandePizza.NumCommande}! Veuillez le prendre en note!");
+                await stepContext.Context.SendActivityAsync(messageFinal, cancellationToken);
             }
             return await stepContext.EndDialogAsync(commandePizza, cancellationToken);
         }
@@ -206,7 +210,7 @@ namespace TP2withSDK.Dialogs
             CancellationToken cancellationToken)
         {
             var isValid = promptContext.Recognized.Succeeded &&
-                          promptContext.Recognized.Value is > 0 and < 10;
+                          promptContext.Recognized.Value is > 0 and <= 10;
             return Task.FromResult(isValid);
         }
         
