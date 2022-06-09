@@ -33,8 +33,6 @@ namespace TP2withSDK.Dialogs
 
         private async Task<DialogTurnResult> ConfirmationStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            
-            var numReservation = (int)stepContext.Options;
 
             var promptMessage = MessageFactory.Text("Vous désirez annuler votre réservation?");
             return await stepContext.PromptAsync(nameof(ConfirmPrompt), new PromptOptions { Prompt = promptMessage}, cancellationToken);
@@ -51,7 +49,7 @@ namespace TP2withSDK.Dialogs
             }
             else
             {
-                var numReservation = (int)stepContext.Options;
+                var numReservation = stepContext.Options == null ? -1 : (int)stepContext.Options;
                 if (numReservation == -1)
                 {
                     var promptMessage = MessageFactory.Text("Quel est votre numéro de commande (100 à 999)?", "Quel est votre numéro de commande (100 à 999)?");
