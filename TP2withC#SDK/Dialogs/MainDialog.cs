@@ -96,7 +96,9 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                 case PizzaRestaurant.Intent.Commander:
                     var commandePizza = luisResult.PizzaOrderEntities; 
                     return await stepContext.BeginDialogAsync(nameof(CommandeDialog), commandePizza, cancellationToken);
-               
+                case PizzaRestaurant.Intent.StatusCommande:
+                    var orderNumber = luisResult.OrderStatusEntities.NumeroCommande;
+                    return await stepContext.BeginDialogAsync(nameof(OrderStatusDialog), orderNumber, cancellationToken);
                 case PizzaRestaurant.Intent.Satisfaction:
                     return await stepContext.BeginDialogAsync(nameof(SatisfactionDialog), null, cancellationToken);
 
