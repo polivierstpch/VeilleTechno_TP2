@@ -9,5 +9,6 @@ namespace TP2withSDK.Entities
     {
         public string Type;
         public string Crust;
+        public int NumCommande { get; set; }
     }
 }

@@ -72,28 +72,27 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             {
                 case PizzaRestaurant.Intent.Reserver:
                     var reservation = luisResult.ReservationEntities;
-                    //await ShowWarningForUnsupportedCities(stepContext.Context, luisResult, cancellationToken);
-                    //var reservationDetails = (ReservationDetails)luisResult.Entities.Reservation;
-
                     var reservationDetails = new ReservationDetails()
                     {
-                            NumberOfPlaces = reservation.NumberOfPlaces > 0 ? reservation.NumberOfPlaces.Value : -1,
-                            Date = reservation.Date, //Convert.ToDateTime(reservation.Date, new CultureInfo("fr-CA")).Date,
-                            Client = new Client() { PhoneNumber = reservation.NumeroTelephoneClient, Name = reservation.NomClient },
-                            Time = reservation.Time
+                        NumberOfPlaces = reservation.NumberOfPlaces > 0 ? reservation.NumberOfPlaces.Value : -1,
+                        Date = reservation.Date,
+                        Client = new Client() { PhoneNumber = reservation.NumeroTelephoneClient, Name = reservation.NomClient },
+                        Time = reservation.Time
                     };
 
                     return await stepContext.BeginDialogAsync(nameof(AjoutReservationDialog), reservationDetails, cancellationToken);
-                //case PizzaRestaurant.Intent.GetWeather:
-                //    // We haven't implemented the GetWeatherDialog so we just display a TODO message.
-                //    var getWeatherMessageText = "TODO: get weather flow here";
-                //    var getWeatherMessage = MessageFactory.Text(getWeatherMessageText, getWeatherMessageText, InputHints.IgnoringInput);
-                //    await stepContext.Context.SendActivityAsync(getWeatherMessage, cancellationToken);
-                //    break;
+
+                //case PizzaRestaurant.Intent.AnnulerReservation:
+                //    var numReservation = luisResult.AnnulationEntities.NumeroDeReservation;
+                //    return await stepContext.BeginDialogAsync(nameof(AnnulerReservationDialog), numReservation, cancellationToken);
+
+                case PizzaRestaurant.Intent.StatusCommande:
+                    var numReservation = luisResult.AnnulationEntities.NumeroDeReservation;
+                    return await stepContext.BeginDialogAsync(nameof(OrderStatusDialog), numReservation, cancellationToken);
 
                 default:
                     // Catch all for unhandled intents
-                    var didntUnderstandMessageText = $"Sorry, I didn't get that. Please try asking in a different way (intent was {luisResult.TopIntent().intent})";
+                    var didntUnderstandMessageText = $"Désolé, je n'ai pas compris ce que vous voulez faire (intent was {luisResult.TopIntent().intent})";
                     var didntUnderstandMessage = MessageFactory.Text(didntUnderstandMessageText, didntUnderstandMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(didntUnderstandMessage, cancellationToken);
                     break;

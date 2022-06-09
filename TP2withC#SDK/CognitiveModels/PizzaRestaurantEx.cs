@@ -21,6 +21,26 @@ namespace Microsoft.BotBuilderSamples
             }
         }
 
+        public object CommandeEntities { get; internal set; }
+
+        //public (int? NumeroDeReservation, string RIEN) AnnulationEntities
+        //{
+        //    get
+        //    {
+        //        var numReservation = Entities?.Annulation?.FirstOrDefault()?.NumeroDeReservation?.FirstOrDefault();
+        //        return (numReservation, "");
+        //    }
+        //}
+
+        //public (int? NumeroCommande, string EMPTY) CommandeEntities
+        //{
+        //    get
+        //    {
+        //        var orderNumber = Entities?.Commande?.FirstOrDefault()?.NumeroDeReservation?.FirstOrDefault();
+        //        return (orderNumber, "");
+        //    }
+        //}
+
         //public (string To, string Airport) ToEntities
         //{
         //    get
