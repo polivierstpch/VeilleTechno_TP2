@@ -15,5 +15,13 @@ namespace TP2withSDK
                 NumReservation = 777
             }
         };
+
+        public List<Commande> ListeCommandes = new List<Commande>()
+        {
+            new Commande()
+            {
+                NumCommande = 222
+            }
+        };
     }
 }

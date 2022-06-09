@@ -42,5 +42,6 @@ namespace TP2withSDK.Entities
         public TypeCroute Croute;
         public Taille Taille;
         public int Quantite;
+        public int NumCommande { get; set; }
     }
 }

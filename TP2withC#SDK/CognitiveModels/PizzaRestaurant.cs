@@ -55,6 +55,13 @@ namespace Microsoft.BotBuilderSamples
             }
 
             public PizzaOrderClass[] PizzaOrder;
+
+            public class OrderStatusClass
+            {
+                public int[] NumeroCommande;
+            }
+
+            public OrderStatusClass[] OrderStatus;
         }
         public _Entities Entities;
 
