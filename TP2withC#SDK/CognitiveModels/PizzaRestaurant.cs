@@ -43,7 +43,18 @@ namespace Microsoft.BotBuilderSamples
             {
                 public int[] NumeroDeReservation;
             }
+            
             public AnnulationClass[] Annulation;
+            
+            public class PizzaOrderClass
+            {
+                public string[] Size;
+                public string[] Type;
+                public string[] Crust;
+                public int[] Quanitity;
+            }
+
+            public PizzaOrderClass[] PizzaOrder;
         }
         public _Entities Entities;
 

@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 using System.Linq;
+using TP2withSDK.Entities;
+using TP2withSDK.Extensions;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -29,6 +31,15 @@ namespace Microsoft.BotBuilderSamples
                 return (numReservation, "");
             }
         }
+
+        public CommandePizza PizzaOrderEntities =>
+            new CommandePizza
+            {
+                Taille = Entities?.PizzaOrder?.FirstOrDefault()?.Size?.FirstOrDefault()?.ToTaille() ?? default,
+                Type = Entities?.PizzaOrder?.FirstOrDefault()?.Type?.FirstOrDefault()?.ToTypePizza() ?? default,
+                Croute = Entities?.PizzaOrder?.FirstOrDefault()?.Crust?.FirstOrDefault()?.ToTypeCroute() ?? default,
+                Quantite = Entities?.PizzaOrder?.FirstOrDefault()?.Quanitity?.FirstOrDefault() ?? 0
+            };
 
         //public (string To, string Airport) ToEntities
         //{
