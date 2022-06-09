@@ -25,7 +25,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
         private Data PizzeriaData;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, AnnulerReservationDialog annulationDialog, ILogger<MainDialog> logger, Data data)
+        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, AnnulerReservationDialog annulationDialog, SatisfactionDialog satisfactionDialog, ILogger<MainDialog> logger, Data data)
             : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
@@ -34,6 +34,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(reservationDialog);
             AddDialog(annulationDialog);
+            AddDialog(satisfactionDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 IntroStepAsync,
@@ -57,7 +58,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             }
 
             // Use the text provided in FinalStepAsync or the default if it is the first time.
-            var messageText = stepContext.Options?.ToString() ?? $"Bienvenue chez TechPizza! Que voulez-vous faire aujourd'hui? Vous pouvez réserver en salle, modifier/annuler une réservation, faire une commande en ligne, connaître le status de votre commande ou donner votre avis.";
+            var messageText = stepContext.Options?.ToString() ?? $"Bienvenue chez TechPizza! Que voulez-vous faire aujourd'hui? Vous pouvez: \n\n Réserver en salle \n\n Annuler une réservation \n\n Faire une commande en ligne \n\n Connaître le status de votre commande \n\n Donner votre avis.";
             var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
             return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
         }
@@ -89,7 +90,9 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                 case PizzaRestaurant.Intent.AnnulerReservation:
                     var numReservation = luisResult.AnnulationEntities.NumeroDeReservation; 
                     return await stepContext.BeginDialogAsync(nameof(AnnulerReservationDialog), numReservation, cancellationToken);
-                
+
+                case PizzaRestaurant.Intent.Satisfaction:
+                    return await stepContext.BeginDialogAsync(nameof(SatisfactionDialog), null, cancellationToken);
 
                 default:
                     // Catch all for unhandled intents

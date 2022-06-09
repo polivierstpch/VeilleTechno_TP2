@@ -126,7 +126,7 @@ namespace TP2withSDK.Dialogs
             var reservationDetails = (ReservationDetails)stepContext.Options;
             reservationDetails.Client.PhoneNumber = (string)stepContext.Result;
             reservationDetails.NumReservation = GenerateNumReservation();
-            var messageFinal = String.Format("Merci pour votre réservation! Votre numéro de réservation est le {0}. Notez ce numéro si vous devez annuler votre réservation. Vos informations: \n Nombre de personnes: {1} \n Date: {2} \n Heure: {3} \n Nom: {4} \n Numéro de téléphone: {5}" 
+            var messageFinal = String.Format("Merci pour votre réservation! Votre numéro de réservation est le {0}. Notez ce numéro si vous devez annuler votre réservation. Vos informations: \n\n Nombre de personnes: {1} \n\n Date: {2} \n\n Heure: {3} \n\n Nom: {4} \n\n Numéro de téléphone: {5}" 
                 ,reservationDetails.NumReservation, 
                 reservationDetails.NumberOfPlaces, 
                 reservationDetails.Date, 

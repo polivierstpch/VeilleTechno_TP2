@@ -62,7 +62,7 @@ namespace TP2withSDK.Dialogs
                 {
 
                     var promptMessage = MessageFactory.Text("Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999", "Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999");
-                    var retryPrompt = MessageFactory.Text("Veuillez entrer une nombre de personnes valide", "Veuillez entrer une nombre de personnes valide");
+                    var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
                     return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
 
                 }
