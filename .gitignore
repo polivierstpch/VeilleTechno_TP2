@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.idea/config
+.idea/.idea.TP2_veilletechno_rl_pospc_cmr/.idea
