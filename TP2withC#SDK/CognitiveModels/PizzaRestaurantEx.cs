@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 using System.Linq;
+using TP2withSDK.Entities;
+using TP2withSDK.Extensions;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -21,25 +23,23 @@ namespace Microsoft.BotBuilderSamples
             }
         }
 
-        public object CommandeEntities { get; internal set; }
+        public (int? NumeroDeReservation, string RIEN) AnnulationEntities
+        {
+            get
+            {
+                var numReservation = Entities?.Annulation?.FirstOrDefault()?.NumeroDeReservation?.FirstOrDefault();
+                return (numReservation, "");
+            }
+        }
 
-        //public (int? NumeroDeReservation, string RIEN) AnnulationEntities
-        //{
-        //    get
-        //    {
-        //        var numReservation = Entities?.Annulation?.FirstOrDefault()?.NumeroDeReservation?.FirstOrDefault();
-        //        return (numReservation, "");
-        //    }
-        //}
-
-        //public (int? NumeroCommande, string EMPTY) CommandeEntities
-        //{
-        //    get
-        //    {
-        //        var orderNumber = Entities?.Commande?.FirstOrDefault()?.NumeroDeReservation?.FirstOrDefault();
-        //        return (orderNumber, "");
-        //    }
-        //}
+        public CommandePizza PizzaOrderEntities =>
+            new CommandePizza
+            {
+                Taille = Entities?.PizzaOrder?.FirstOrDefault()?.Size?.FirstOrDefault()?.ToTaille() ?? default,
+                Type = Entities?.PizzaOrder?.FirstOrDefault()?.Type?.FirstOrDefault()?.ToTypePizza() ?? default,
+                Croute = Entities?.PizzaOrder?.FirstOrDefault()?.Crust?.FirstOrDefault()?.ToTypeCroute() ?? default,
+                Quantite = Entities?.PizzaOrder?.FirstOrDefault()?.Quanitity?.FirstOrDefault() ?? 0
+            };
 
         //public (string To, string Airport) ToEntities
         //{

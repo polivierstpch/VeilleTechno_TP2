@@ -10,6 +10,7 @@ using Microsoft.BotBuilderSamples.Bots;
 using Microsoft.BotBuilderSamples.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TP2withSDK;
 using TP2withSDK.Dialogs;
 
 namespace Microsoft.BotBuilderSamples
@@ -39,8 +40,15 @@ namespace Microsoft.BotBuilderSamples
             // Register LUIS recognizer
             services.AddSingleton<PizzaRestaurantRecognizer>();
 
-            // Register the BookingDialog.
+            // Register dialogs.
             services.AddSingleton<AjoutReservationDialog>();
+            services.AddSingleton<AnnulerReservationDialog>();
+            services.AddSingleton<CommandeDialog>();
+            services.AddSingleton<SatisfactionDialog>();
+          
+            //Register in-memory data
+            services.AddSingleton<Data>();
+
 
             // 
 
