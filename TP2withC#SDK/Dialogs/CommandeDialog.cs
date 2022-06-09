@@ -66,16 +66,19 @@ namespace TP2withSDK.Dialogs
                     Choices = ChoiceFactory.ToChoices(_pizzaTypeChoices),
                 }, cancellationToken);
             }
-            
-            return await stepContext.NextAsync(commandePizza.Type, cancellationToken);
+
+            var typeFoundChoice = new FoundChoice { Value = commandePizza.Type.GetTextValue() };
+            return await stepContext.NextAsync(typeFoundChoice, cancellationToken);
         }
         
         private async Task<DialogTurnResult> SizeChoiceStepAsync(WaterfallStepContext stepContext,
             CancellationToken cancellationToken)
         {
             var commandePizza = (CommandePizza)stepContext.Options;
-            var choice = (FoundChoice)stepContext.Result;
-            commandePizza.Type = choice.Value.ToTypePizza();
+            commandePizza.Type = stepContext.Result is FoundChoice choice
+                ? choice.Value.ToTypePizza()
+                : (TypePizza)stepContext.Result;
+
             
             if (commandePizza.Taille == Taille.Aucune)
             {
@@ -86,7 +89,7 @@ namespace TP2withSDK.Dialogs
                     Choices = ChoiceFactory.ToChoices(_sizeChoices),
                 }, cancellationToken);
             }
-
+            
             return await stepContext.NextAsync(commandePizza.Taille, cancellationToken);
         }
 
@@ -94,8 +97,9 @@ namespace TP2withSDK.Dialogs
             CancellationToken cancellationToken)
         {
             var commandePizza = (CommandePizza)stepContext.Options;
-            var choice = (FoundChoice)stepContext.Result;
-            commandePizza.Taille = choice.Value.ToTaille();
+            commandePizza.Taille = stepContext.Result is FoundChoice choice
+                ? choice.Value.ToTaille()
+                : (Taille)stepContext.Result;
             
             if (commandePizza.Croute == TypeCroute.Aucune)
             {
@@ -114,8 +118,9 @@ namespace TP2withSDK.Dialogs
             CancellationToken cancellationToken)
         {
             var commandePizza = (CommandePizza)stepContext.Options;
-            var choice = (FoundChoice)stepContext.Result;
-            commandePizza.Croute = choice.Value.ToTypeCroute();
+            commandePizza.Croute = stepContext.Result is FoundChoice choice
+                ? choice.Value.ToTypeCroute()
+                : (TypeCroute)stepContext.Result;
             
             if (commandePizza.Quantite <= 0)
             {
@@ -185,7 +190,7 @@ namespace TP2withSDK.Dialogs
             
             if (!(bool)stepContext.Result)
             {
-                await stepContext.Context.SendActivityAsync("La commande à été annulée. Merci d'avoir utilisé le service de commande!");
+                await stepContext.Context.SendActivityAsync("La commande à été annulée. Merci d'avoir utilisé le service de commande!", cancellationToken: cancellationToken);
             }
             else
             {
@@ -215,7 +220,7 @@ namespace TP2withSDK.Dialogs
         private static int GenerateCommandNumber()
         {
             var rd = new Random();
-            return rd.Next(1000, 9999);
+            return rd.Next(100, 999);
         }
     }
 }
