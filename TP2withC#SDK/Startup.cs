@@ -45,12 +45,10 @@ namespace Microsoft.BotBuilderSamples
             services.AddSingleton<AnnulerReservationDialog>();
             services.AddSingleton<CommandeDialog>();
             services.AddSingleton<SatisfactionDialog>();
-          
+            services.AddSingleton<OrderStatusDialog>();
+
             //Register in-memory data
             services.AddSingleton<Data>();
-
-
-            // 
 
             // The MainDialog that will be run by the bot.
             services.AddSingleton<MainDialog>();

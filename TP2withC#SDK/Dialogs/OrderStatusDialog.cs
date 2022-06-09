@@ -18,7 +18,7 @@ namespace TP2withSDK.Dialogs
         {
             AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), OrderNumberPromptValidatorAsync));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
-{
+            {
                 OrderNumberPromptAsync,
                 FinalStepAsync,
             }));
