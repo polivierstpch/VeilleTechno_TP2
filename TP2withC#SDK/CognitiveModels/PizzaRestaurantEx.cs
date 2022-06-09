@@ -47,13 +47,13 @@ namespace Microsoft.BotBuilderSamples
                 };
             }
         }
-            
-        public (int? NumeroCommande, string RIEN) OrderStatusEntities
+
+        public int OrderStatusEntities
         {
             get
             {
-                var numReservation = Entities?.OrderStatus?.FirstOrDefault()?.NumeroCommande?.FirstOrDefault();
-                return (numReservation, "");
+                var numCommande = Entities?.OrderStatus?.FirstOrDefault()?.NumeroCommande?.FirstOrDefault();
+                return numCommande ?? -1;
             }
         }
 
