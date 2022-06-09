@@ -35,6 +35,7 @@ namespace TP2withSDK.Dialogs
                 TimeStepAsync,
                 NomStepAsync,
                 NumTelStepAsync,
+                ConfirmationStepAsync,
                 FinalStepAsync,
             }));
             PizzeriaData = data;
@@ -121,20 +122,34 @@ namespace TP2withSDK.Dialogs
             return await stepContext.NextAsync(reservationDetails.Client.PhoneNumber, cancellationToken);
         }
 
-        private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> ConfirmationStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             var reservationDetails = (ReservationDetails)stepContext.Options;
             reservationDetails.Client.PhoneNumber = (string)stepContext.Result;
-            reservationDetails.NumReservation = GenerateNumReservation();
-            var messageFinal = String.Format("Merci pour votre réservation! Votre numéro de réservation est le {0}. Notez ce numéro si vous devez annuler votre réservation. Vos informations: \n\n Nombre de personnes: {1} \n\n Date: {2} \n\n Heure: {3} \n\n Nom: {4} \n\n Numéro de téléphone: {5}" 
-                ,reservationDetails.NumReservation, 
-                reservationDetails.NumberOfPlaces, 
-                reservationDetails.Date, 
-                reservationDetails.Time, 
-                reservationDetails.Client.Name, 
+            var message = String.Format("Vos informations de réservation sont les suivantes: \n\n Nombre de personnes: {0} \n\n Date: {1} \n\n Heure: {2} \n\n Nom: {3} \n\n Numéro de téléphone: {4}. Souhaitez-vous procéder à la réservation?",
+                reservationDetails.NumberOfPlaces,
+                reservationDetails.Date,
+                reservationDetails.Time,
+                reservationDetails.Client.Name,
                 reservationDetails.Client.PhoneNumber);
-            await stepContext.Context.SendActivityAsync(messageFinal);
-            PizzeriaData.ListeReservations.Add(reservationDetails);
+            var promptMessage = MessageFactory.Text(message, message, InputHints.ExpectingInput);
+            return await stepContext.PromptAsync(nameof(ConfirmPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var reservationDetails = (ReservationDetails)stepContext.Options;
+            if (!(bool)stepContext.Result)
+            {
+                await stepContext.Context.SendActivityAsync("La réservation n'a pas été ajoutée. Veuillez recommencer.");
+            }
+            else
+            {
+                reservationDetails.NumReservation = GenerateNumReservation();
+                PizzeriaData.ListeReservations.Add(reservationDetails);
+                var messageFinal = String.Format($"Merci pour votre réservation! Votre numéro de réservation est le {reservationDetails.NumReservation}. Notez ce numéro si vous devez annuler votre réservation.");
+                await stepContext.Context.SendActivityAsync(messageFinal);
+            }
             return await stepContext.EndDialogAsync(reservationDetails, cancellationToken);
         }
 
