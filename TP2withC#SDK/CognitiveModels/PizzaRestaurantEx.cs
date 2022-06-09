@@ -40,12 +40,12 @@ namespace Microsoft.BotBuilderSamples
                 Croute = Entities?.PizzaOrder?.FirstOrDefault()?.Crust?.FirstOrDefault()?.ToTypeCroute() ?? default,
                 Quantite = Entities?.PizzaOrder?.FirstOrDefault()?.Quanitity?.FirstOrDefault() ?? 0
             };
-        public (int? NumeroCommande, string RIEN) OrderStatusEntities
+        public int OrderStatusEntities
         {
             get
             {
-                var numReservation = Entities?.OrderStatus?.FirstOrDefault()?.NumeroCommande?.FirstOrDefault();
-                return (numReservation, "");
+                var numCommande = Entities?.OrderStatus?.FirstOrDefault()?.NumeroCommande?.FirstOrDefault();
+                return numCommande ?? -1;
             }
         }
 

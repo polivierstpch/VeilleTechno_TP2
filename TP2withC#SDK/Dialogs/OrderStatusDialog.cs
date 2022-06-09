@@ -15,44 +15,42 @@ namespace TP2withSDK.Dialogs
     {
         private Data PizzeriaData;
 
-        public OrderStatusDialog() 
+        public OrderStatusDialog(Data data) 
             : base(nameof(OrderStatusDialog))
         {
             AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), OrderNumberPromptValidatorAsync));
+            AddDialog(new ConfirmPrompt(nameof(ConfirmPrompt)));
+            AddDialog(new DateResolverDialog());
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 OrderNumberPromptAsync,
                 FinalStepAsync,
             }));
+
+            InitialDialogId = nameof(WaterfallDialog);
+            PizzeriaData = data;
         }
 
         private async Task<DialogTurnResult> OrderNumberPromptAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
 
-            if (!(bool)stepContext.Result)
+            var orderNumber = (int)stepContext.Options;
+            if (orderNumber == -1)
             {
-                return await stepContext.EndDialogAsync(null, cancellationToken);
+                var promptMessage = MessageFactory.Text("Quel est votre numéro de commande (100 à 999)?", "Quel est votre numéro de commande (100 à 999)?");
+                var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
+                return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
             }
-            else
+            else if (orderNumber < 100 || orderNumber > 999)
             {
-                var orderNumber = (int)stepContext.Options;
-                if (orderNumber == -1)
-                {
-                    var promptMessage = MessageFactory.Text("Quel est votre numéro de commande (100 à 999)?", "Quel est votre numéro de commande (100 à 999)?");
-                    var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
-                    return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
-                }
-                else if (orderNumber < 100 || orderNumber > 999)
-                {
 
-                    var promptMessage = MessageFactory.Text("Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999", "Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999");
-                    var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
-                    return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
+                var promptMessage = MessageFactory.Text("Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999", "Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999");
+                var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
+                return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
 
-                }
-
-                return await stepContext.NextAsync(orderNumber, cancellationToken);
             }
+
+            return await stepContext.NextAsync(orderNumber, cancellationToken);
 
         }
 
