@@ -16,8 +16,8 @@ namespace TP2withSDK.Dialogs
     public class AjoutReservationDialog : CancelAndHelpDialog
     {
         private const string PlacesStepMsgText = "Pour combien de personnes voulez-vous réserver?";
-
-        public AjoutReservationDialog()
+        private Data PizzeriaData;
+        public AjoutReservationDialog(Data data)
             : base(nameof(AjoutReservationDialog))
         {
             AddDialog(new TextPrompt(nameof(TextPrompt)));
@@ -37,7 +37,7 @@ namespace TP2withSDK.Dialogs
                 NumTelStepAsync,
                 FinalStepAsync,
             }));
-
+            PizzeriaData = data;
             // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
         }
@@ -126,7 +126,7 @@ namespace TP2withSDK.Dialogs
             var reservationDetails = (ReservationDetails)stepContext.Options;
             reservationDetails.Client.PhoneNumber = (string)stepContext.Result;
             reservationDetails.NumReservation = GenerateNumReservation();
-            var messageFinal = String.Format("Merci pour votre réservation! Votre numéro de réservation est le {0}. Notez ce numéro si vous devez annuler votre réservation. Vos informations: \n Nombre de personnes: {1} \n Date: {2} \n Heure: {3} \n Nom: {4} \n Numéro de téléphone: {5}" 
+            var messageFinal = String.Format("Merci pour votre réservation! Votre numéro de réservation est le {0}. Notez ce numéro si vous devez annuler votre réservation. Vos informations: \n\n Nombre de personnes: {1} \n\n Date: {2} \n\n Heure: {3} \n\n Nom: {4} \n\n Numéro de téléphone: {5}" 
                 ,reservationDetails.NumReservation, 
                 reservationDetails.NumberOfPlaces, 
                 reservationDetails.Date, 
@@ -134,7 +134,7 @@ namespace TP2withSDK.Dialogs
                 reservationDetails.Client.Name, 
                 reservationDetails.Client.PhoneNumber);
             await stepContext.Context.SendActivityAsync(messageFinal);
-
+            PizzeriaData.ListeReservations.Add(reservationDetails);
             return await stepContext.EndDialogAsync(reservationDetails, cancellationToken);
         }
 

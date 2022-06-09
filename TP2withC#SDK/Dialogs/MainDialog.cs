@@ -12,6 +12,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
+using TP2withSDK;
 using TP2withSDK.Dialogs;
 using TP2withSDK.Entities;
 
@@ -21,22 +22,21 @@ namespace Microsoft.BotBuilderSamples.Dialogs
     {
         private readonly PizzaRestaurantRecognizer _luisRecognizer;
         protected readonly ILogger Logger;
+        private Data PizzeriaData;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, 
-            AjoutReservationDialog reservationDialog, 
-            AnnulerReservationDialog annulationDialog, 
-            CommandeDialog commandeDialog,
-            ILogger<MainDialog> logger)
+
+        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, AnnulerReservationDialog annulationDialog, CommandeDialog commandeDialog, SatisfactionDialog satisfactionDialog, ILogger<MainDialog> logger, Data data)
             : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
             Logger = logger;
-
+            PizzeriaData = data;
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(reservationDialog);
             AddDialog(annulationDialog);
             AddDialog(commandeDialog);
+            AddDialog(satisfactionDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 IntroStepAsync,
@@ -46,6 +46,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
 
             // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
+            
         }
 
         private async Task<DialogTurnResult> IntroStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -59,7 +60,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             }
 
             // Use the text provided in FinalStepAsync or the default if it is the first time.
-            var messageText = stepContext.Options?.ToString() ?? $"Bienvenue chez TechPizza! Que voulez-vous faire aujourd'hui? Vous pouvez réserver en salle, modifier/annuler une réservation, faire une commande en ligne, connaître le status de votre commande ou donner votre avis.";
+            var messageText = stepContext.Options?.ToString() ?? $"Bienvenue chez TechPizza! Que voulez-vous faire aujourd'hui? Vous pouvez: \n\n Réserver en salle \n\n Annuler une réservation \n\n Faire une commande en ligne \n\n Connaître le status de votre commande \n\n Donner votre avis.";
             var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
             return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
         }
@@ -91,14 +92,18 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                 case PizzaRestaurant.Intent.AnnulerReservation:
                     var numReservation = luisResult.AnnulationEntities.NumeroDeReservation; 
                     return await stepContext.BeginDialogAsync(nameof(AnnulerReservationDialog), numReservation, cancellationToken);
-                
+
                 case PizzaRestaurant.Intent.Commander:
                     var commandePizza = luisResult.PizzaOrderEntities; 
                     return await stepContext.BeginDialogAsync(nameof(CommandeDialog), commandePizza, cancellationToken);
-                
+               
+                case PizzaRestaurant.Intent.Satisfaction:
+                    return await stepContext.BeginDialogAsync(nameof(SatisfactionDialog), null, cancellationToken);
+
+
                 default:
                     // Catch all for unhandled intents
-                    var didntUnderstandMessageText = $"Désolé, je n'ai pas compris ce que vous voulez faire (intent was {luisResult.TopIntent().intent})";
+                    var didntUnderstandMessageText = $"Désolé, je n'ai pas compris ce que vous voulez faire.";
                     var didntUnderstandMessage = MessageFactory.Text(didntUnderstandMessageText, didntUnderstandMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(didntUnderstandMessage, cancellationToken);
                     break;

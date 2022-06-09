@@ -10,6 +10,7 @@ using Microsoft.BotBuilderSamples.Bots;
 using Microsoft.BotBuilderSamples.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TP2withSDK;
 using TP2withSDK.Dialogs;
 
 namespace Microsoft.BotBuilderSamples
@@ -43,6 +44,11 @@ namespace Microsoft.BotBuilderSamples
             services.AddSingleton<AjoutReservationDialog>();
             services.AddSingleton<AnnulerReservationDialog>();
             services.AddSingleton<CommandeDialog>();
+            services.AddSingleton<SatisfactionDialog>();
+          
+            //Register in-memory data
+            services.AddSingleton<Data>();
+
 
             // The MainDialog that will be run by the bot.
             services.AddSingleton<MainDialog>();

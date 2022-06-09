@@ -12,7 +12,8 @@ namespace TP2withSDK.Dialogs
 {
     public class AnnulerReservationDialog : CancelAndHelpDialog
     {
-        public AnnulerReservationDialog()
+        private Data PizzeriaData;
+        public AnnulerReservationDialog(Data data)
             : base(nameof(AnnulerReservationDialog))
         {
             AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), NumReservationPromptValidatorAsync));
@@ -27,6 +28,7 @@ namespace TP2withSDK.Dialogs
 
             // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
+            PizzeriaData = data;
         }
 
         private async Task<DialogTurnResult> ConfirmationStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -60,7 +62,7 @@ namespace TP2withSDK.Dialogs
                 {
 
                     var promptMessage = MessageFactory.Text("Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999", "Le numéro de commande demandé est invalide. Veuillez inscrire un numéro de commande entre 100 et 999");
-                    var retryPrompt = MessageFactory.Text("Veuillez entrer une nombre de personnes valide", "Veuillez entrer une nombre de personnes valide");
+                    var retryPrompt = MessageFactory.Text("Veuillez inscrire un numéro de commande entre 100 et 999", "Veuillez inscrire un numéro de commande entre 100 et 999");
                     return await stepContext.PromptAsync(nameof(NumberPrompt<int>), new PromptOptions { Prompt = promptMessage, RetryPrompt = retryPrompt }, cancellationToken);
 
                 }
@@ -72,9 +74,19 @@ namespace TP2withSDK.Dialogs
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var numReservation = stepContext.Result;
-            await stepContext.Context.SendActivityAsync($"La réservation #{numReservation} a été annulée. Veuillez réutiliser notre assistant pour une nouvelle réservation!");
+            var numReservation = (int)stepContext.Result;
 
+            var numReservationExiste = PizzeriaData.ListeReservations.Where(_ => _.NumReservation == numReservation).ToList().Count > 0;
+
+            if (!numReservationExiste)
+            {
+                await stepContext.Context.SendActivityAsync($"La réservation #{numReservation} ne figure pas à nos dossier. Veuillez recommencer ou appeler au restaurant.");
+            }
+            else
+            {
+                await stepContext.Context.SendActivityAsync($"La réservation #{numReservation} a été annulée. Veuillez réutiliser notre assistant pour une nouvelle réservation!");
+            }
+            
             return await stepContext.EndDialogAsync(null, cancellationToken);
         }
 
