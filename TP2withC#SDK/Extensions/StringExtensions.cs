@@ -36,7 +36,7 @@ namespace TP2withSDK.Extensions
                 return enumValue;
             
             var valToLower = value.ToLower();
-            return !StringToTailleMap.ContainsKey(valToLower) ? StringToTailleMap[valToLower] : default;
+            return StringToTailleMap.ContainsKey(valToLower) ? StringToTailleMap[valToLower] : default;
         }
 
         public static TypePizza ToTypePizza(this string value)
@@ -45,7 +45,7 @@ namespace TP2withSDK.Extensions
                 return enumValue;
 
             var valToLower = value.ToLower();
-            return !StringToTypePizzaMap.ContainsKey(valToLower) ? StringToTypePizzaMap[valToLower] : default ;
+            return StringToTypePizzaMap.ContainsKey(valToLower) ? StringToTypePizzaMap[valToLower] : default ;
         }
 
         public static TypeCroute ToTypeCroute(this string value)
@@ -54,7 +54,7 @@ namespace TP2withSDK.Extensions
                 return enumValue;
             
             var valToLower = value.ToLower();
-            return !StringToTypeCrouteMap.ContainsKey(valToLower) ? StringToTypeCrouteMap[valToLower] : default;
+            return StringToTypeCrouteMap.ContainsKey(valToLower) ? StringToTypeCrouteMap[valToLower] : default;
         }
     }
 }

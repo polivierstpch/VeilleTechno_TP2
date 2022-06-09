@@ -36,14 +36,17 @@ namespace Microsoft.BotBuilderSamples
         {
             get
             {
-                var type = Entities?.PizzaOrder?.FirstOrDefault()?.Type?.FirstOrDefault()?.FirstOrDefault();
+                var taille = Entities?.PizzaOrder?.FirstOrDefault()?.Size?.FirstOrDefault()?.FirstOrDefault() ?? "";
+                var type = Entities?.PizzaOrder?.FirstOrDefault()?.Type?.FirstOrDefault()?.FirstOrDefault() ?? "";
+                var croute = Entities?.PizzaOrder?.FirstOrDefault()?.Crust?.FirstOrDefault()?.FirstOrDefault() ?? "";
+                var quantite = Entities?.PizzaOrder?.FirstOrDefault()?.Quanitity?.FirstOrDefault();
                 return new CommandePizza
                 {
                     Client = new Client(),
-                    Taille = Entities?.PizzaOrder?.FirstOrDefault()?.Size?.FirstOrDefault()?.FirstOrDefault()?.ToTaille() ?? default,
-                    Type = type?.ToTypePizza() ?? default,
-                    Croute = Entities?.PizzaOrder?.FirstOrDefault()?.Crust?.FirstOrDefault()?.FirstOrDefault()?.ToTypeCroute() ?? default,
-                    Quantite = Entities?.PizzaOrder?.FirstOrDefault()?.Quanitity?.FirstOrDefault() ?? 0
+                    Taille = taille.ToTaille(),
+                    Type = type.ToTypePizza(),
+                    Croute = croute.ToTypeCroute(),
+                    Quantite = quantite.GetValueOrDefault()
                 };
             }
         }
