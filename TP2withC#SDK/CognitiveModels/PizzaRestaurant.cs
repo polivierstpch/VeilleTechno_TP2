@@ -48,9 +48,9 @@ namespace Microsoft.BotBuilderSamples
             
             public class PizzaOrderClass
             {
-                public string[] Size;
-                public string[] Type;
-                public string[] Crust;
+                public string[][] Size;
+                public string[][] Type;
+                public string[][] Crust;
                 public int[] Quanitity;
             }
 

@@ -1,17 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
 using TP2withSDK;
 using TP2withSDK.Dialogs;
 using TP2withSDK.Entities;
@@ -94,7 +89,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                     return await stepContext.BeginDialogAsync(nameof(AnnulerReservationDialog), numReservation, cancellationToken);
 
                 case PizzaRestaurant.Intent.Commander:
-                    var commandePizza = luisResult.PizzaOrderEntities; 
+                    var commandePizza = luisResult.PizzaOrderEntities;
                     return await stepContext.BeginDialogAsync(nameof(CommandeDialog), commandePizza, cancellationToken);
                
                 case PizzaRestaurant.Intent.Satisfaction:

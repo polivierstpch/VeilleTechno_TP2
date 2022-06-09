@@ -32,14 +32,22 @@ namespace Microsoft.BotBuilderSamples
             }
         }
 
-        public CommandePizza PizzaOrderEntities =>
-            new CommandePizza
+        public CommandePizza PizzaOrderEntities
+        {
+            get
             {
-                Taille = Entities?.PizzaOrder?.FirstOrDefault()?.Size?.FirstOrDefault()?.ToTaille() ?? default,
-                Type = Entities?.PizzaOrder?.FirstOrDefault()?.Type?.FirstOrDefault()?.ToTypePizza() ?? default,
-                Croute = Entities?.PizzaOrder?.FirstOrDefault()?.Crust?.FirstOrDefault()?.ToTypeCroute() ?? default,
-                Quantite = Entities?.PizzaOrder?.FirstOrDefault()?.Quanitity?.FirstOrDefault() ?? 0
-            };
+                var type = Entities?.PizzaOrder?.FirstOrDefault()?.Type?.FirstOrDefault()?.FirstOrDefault();
+                return new CommandePizza
+                {
+                    Client = new Client(),
+                    Taille = Entities?.PizzaOrder?.FirstOrDefault()?.Size?.FirstOrDefault()?.FirstOrDefault()?.ToTaille() ?? default,
+                    Type = type?.ToTypePizza() ?? default,
+                    Croute = Entities?.PizzaOrder?.FirstOrDefault()?.Crust?.FirstOrDefault()?.FirstOrDefault()?.ToTypeCroute() ?? default,
+                    Quantite = Entities?.PizzaOrder?.FirstOrDefault()?.Quanitity?.FirstOrDefault() ?? 0
+                };
+            }
+        }
+            
         public (int? NumeroCommande, string RIEN) OrderStatusEntities
         {
             get
