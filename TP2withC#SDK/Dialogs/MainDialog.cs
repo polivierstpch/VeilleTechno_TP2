@@ -23,7 +23,11 @@ namespace Microsoft.BotBuilderSamples.Dialogs
         protected readonly ILogger Logger;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, AjoutReservationDialog reservationDialog, AnnulerReservationDialog annulationDialog, ILogger<MainDialog> logger)
+        public MainDialog(PizzaRestaurantRecognizer luisRecognizer, 
+            AjoutReservationDialog reservationDialog, 
+            AnnulerReservationDialog annulationDialog, 
+            CommandeDialog commandeDialog,
+            ILogger<MainDialog> logger)
             : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
@@ -32,6 +36,7 @@ namespace Microsoft.BotBuilderSamples.Dialogs
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(reservationDialog);
             AddDialog(annulationDialog);
+            AddDialog(commandeDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 IntroStepAsync,
@@ -87,7 +92,10 @@ namespace Microsoft.BotBuilderSamples.Dialogs
                     var numReservation = luisResult.AnnulationEntities.NumeroDeReservation; 
                     return await stepContext.BeginDialogAsync(nameof(AnnulerReservationDialog), numReservation, cancellationToken);
                 
-
+                case PizzaRestaurant.Intent.Commander:
+                    var commandePizza = luisResult.PizzaOrderEntities; 
+                    return await stepContext.BeginDialogAsync(nameof(CommandeDialog), commandePizza, cancellationToken);
+                
                 default:
                     // Catch all for unhandled intents
                     var didntUnderstandMessageText = $"Désolé, je n'ai pas compris ce que vous voulez faire (intent was {luisResult.TopIntent().intent})";
