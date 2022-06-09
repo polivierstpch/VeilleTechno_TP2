@@ -13,6 +13,8 @@ namespace TP2withSDK.Dialogs
 {
     public class OrderStatusDialog : CancelAndHelpDialog
     {
+        private Data PizzeriaData;
+
         public OrderStatusDialog() 
             : base(nameof(OrderStatusDialog))
         {
@@ -67,7 +69,7 @@ namespace TP2withSDK.Dialogs
             }
             else
             {
-                await stepContext.Context.SendActivityAsync($"La commande #{orderNumber} a été annulée. Veuillez réutiliser notre assistant pour une nouvelle réservation!");
+                await stepContext.Context.SendActivityAsync($"Nous estimons que la commande #{orderNumber} sera prête d'ici 60 minutes!");
             }
 
             return await stepContext.EndDialogAsync(null, cancellationToken);
